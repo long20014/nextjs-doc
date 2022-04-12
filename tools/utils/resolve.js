@@ -39,8 +39,13 @@ const { sortItems } = require('./sort');
   }
 })();
 
-const { categoryItems, dropdownItems, pageItems, pageItemsJa, pageItemsKo } =
-  data;
+const {
+  categoryItems,
+  dropdownItems,
+  pageItems,
+  pageItemsJa,
+  pageItemsKo,
+} = data;
 
 const {
   categoryItems: defaultCategoryItems,
@@ -294,14 +299,14 @@ function createDocFiles() {
     }
     fs.mkdirSync(categoryDir, { recursive: true });
 
-    const categoryJsonConfig = {
-      label: title,
-      position: index + 1,
-    };
-    fs.writeFileSync(
-      `${categoryDir}/_category_.json`,
-      JSON.stringify(categoryJsonConfig)
-    );
+    // const categoryJsonConfig = {
+    //   label: title,
+    //   position: index + 1,
+    // };
+    // fs.writeFileSync(
+    //   `${categoryDir}/_category_.json`,
+    //   JSON.stringify(categoryJsonConfig)
+    // );
 
     function createDropdowns(dropdowns) {
       dropdowns.forEach((dropdown) => {
