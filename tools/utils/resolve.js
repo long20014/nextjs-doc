@@ -8,7 +8,7 @@ const data = {
 };
 
 const {
-  PAGES_ROOT_DIR,
+  POSTS_ROOT_DIR,
   JA_LOCALE_DIR,
   KO_LOCALE_DIR,
 } = require('../constants');
@@ -369,7 +369,7 @@ function createDocFiles() {
     } = require('../../built-data/data-tree-ko.json');
 
     categoryItems.forEach((i, index) => {
-      createFilesFromCategoryData(PAGES_ROOT_DIR, i, index);
+      createFilesFromCategoryData(POSTS_ROOT_DIR, i, index);
     });
 
     jaCategoryItems.forEach((i, index) => {

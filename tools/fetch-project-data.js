@@ -1,6 +1,6 @@
 const {
   fetch: { fetchProjectData },
-} = require("./utils");
+} = require('./utils');
 
 if (process.env.PROJECT_URL) {
   console.log(
