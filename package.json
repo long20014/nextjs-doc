@@ -3,7 +3,13 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "docusaurus": "docusaurus",
+    "prepare-docs": "node tools/prepare-docusaurus.js",
+    "build-data-tree": "node tools/build-data-tree.js",
+    "fetch-project": "node tools/fetch-project-data.js",
+    "preview": "node tools/preview.js",
+    "purge-docs": "node tools/purge-docs.js"
   },
   "dependencies": {
     "next": "latest",

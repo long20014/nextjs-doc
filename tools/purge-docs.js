@@ -1,7 +1,7 @@
-const fs = require("fs");
-const { DOCS_ROOT_DIR } = require("./constants");
+const fs = require('fs');
+const { PAGES_ROOT_DIR } = require('./constants');
 
-if (fs.existsSync(DOCS_ROOT_DIR)) {
-  fs.rmSync(DOCS_ROOT_DIR, { recursive: true, force: true });
+if (fs.existsSync(PAGES_ROOT_DIR)) {
+  fs.rmSync(PAGES_ROOT_DIR, { recursive: true, force: true });
 }
-fs.mkdirSync(DOCS_ROOT_DIR, { recursive: true });
+fs.mkdirSync(PAGES_ROOT_DIR, { recursive: true });

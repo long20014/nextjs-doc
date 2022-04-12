@@ -35,3 +35,4 @@ yarn-error.log*
 /i18n
 /built-data/*
 /fetched-data/*
+/pages/*
