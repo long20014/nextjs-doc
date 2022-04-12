@@ -33,3 +33,5 @@ yarn-error.log*
 #Data files
 /docs
 /i18n
+/built-data/*
+/fetched-data/*
