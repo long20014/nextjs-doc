@@ -70,18 +70,19 @@ function resolveSidebar() {
       ? pageTitles.concat(childDropdowns)
       : pageTitles;
     const dropdown = {
-      type: 'category',
-      collapsible: true,
       label: item.title,
       items: items,
+      path: `/posts/${item.path}`,
+      name: item.name,
     };
     return dropdown;
   }
 
   function createPage(page) {
     return {
-      path: `/posts/${page.path}/${page.name}`,
+      to: `/posts/${page.path}/${page.name}`,
       label: page.title,
+      path: `/posts/${page.path}`,
     };
   }
 
@@ -101,24 +102,7 @@ function resolveSidebar() {
     ];
   }
 
-  const {
-    categoryItems,
-    createdDate,
-  } = require('../../built-data/data-tree.json');
-  if (!fs.existsSync(`${BUILT_DATA_DIR}/sidebar-tree.json`)) {
-    fs.writeFileSync(
-      `${BUILT_DATA_DIR}/sidebar-tree.json`,
-      JSON.stringify({ dataTreeCreatedDate: 0, sidebarItems: {} })
-    );
-  }
-  const {
-    sidebarItems: oldSidebarItems,
-    dataTreeCreatedDate,
-  } = require('../../built-data/sidebar-tree.json');
-
-  if (oldSidebarItems && dataTreeCreatedDate === createdDate) {
-    return oldSidebarItems;
-  }
+  const { categoryItems } = require('../../built-data/data-tree.json');
 
   let sidebarItems = {};
 
@@ -132,9 +116,8 @@ function resolveSidebar() {
   });
   fs.writeFileSync(
     `${BUILT_DATA_DIR}/sidebar-tree.json`,
-    JSON.stringify({ dataTreeCreatedDate: createdDate, sidebarItems })
+    JSON.stringify({ sidebarItems })
   );
-  return sidebarItems;
 }
 
 function resolveNavbarFromCategories() {
@@ -146,6 +129,7 @@ function resolveNavbarFromCategories() {
     navbarItems.push({
       to: `/posts/${name}/${initialPage}`,
       label: title,
+      path: `/posts/${name}`,
     });
   }
 
@@ -164,8 +148,6 @@ function resolveNavbarFromCategories() {
     `${BUILT_DATA_DIR}/navbar.json`,
     JSON.stringify({ navbarItems })
   );
-
-  return navbarItems;
 }
 
 function deepCopy(obj) {

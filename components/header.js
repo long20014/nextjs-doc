@@ -2,6 +2,8 @@ import utilStyles from '../styles/utils.module.css';
 import Link from 'next/link';
 import { navbarItems } from '../built-data/navbar.json';
 import ActiveLink from './active-link';
+import constants from '../utils/constants';
+const { NAVBAR } = constants;
 
 const styles = {
   headerStyle: {
@@ -26,7 +28,12 @@ export default function Header() {
     <div style={styles.headerStyle}>
       {navbarItems.map((item) => {
         return (
-          <ActiveLink key={item.to} href={item.to}>
+          <ActiveLink
+            key={item.to}
+            href={item.to}
+            path={item.path}
+            type={NAVBAR}
+          >
             {item.label}
           </ActiveLink>
         );
