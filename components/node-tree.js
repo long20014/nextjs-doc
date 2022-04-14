@@ -13,19 +13,14 @@ export default function NodeTree({ items }) {
       {items.map((item) => {
         if (!item.items) {
           return (
-            <li>
-              <ActiveLink
-                key={`${item.path}`}
-                href={`${item.to}`}
-                path={item.path}
-                type={SIDEBAR_LINK}
-              >
+            <li key={item.name}>
+              <ActiveLink href={item.to} path={item.path} type={SIDEBAR_LINK}>
                 {item.label}
               </ActiveLink>
             </li>
           );
         } else {
-          return <Dropdown key={item.label} item={item} />;
+          return <Dropdown item={item} />;
         }
       })}
     </ul>
@@ -51,7 +46,7 @@ function Dropdown({ item }) {
   };
 
   return (
-    <li>
+    <li key={item.name}>
       <div onClick={handleClick} style={style}>
         {expand ? '-' : '+'} {item.label}
       </div>

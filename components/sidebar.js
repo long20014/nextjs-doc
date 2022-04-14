@@ -28,7 +28,7 @@ export default function Sidebar() {
   const sidebar = getSidebar();
   const items = sidebar.items;
   return (
-    <div class={styles.sidebar} id="sidebar">
+    <div className={styles.sidebar} id="sidebar">
       <div className="expand">
         {getSidebarName()}
         <NodeTree items={items} />

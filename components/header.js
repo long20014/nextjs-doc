@@ -1,9 +1,10 @@
 import utilStyles from '../styles/utils.module.css';
 import Link from 'next/link';
-import { navbarItems } from '../built-data/navbar.json';
+import navbarData from '../built-data/navbar.json';
 import ActiveLink from './active-link';
 import constants from '../utils/constants';
 const { NAVBAR } = constants;
+const { navbarItems } = navbarData;
 
 const styles = {
   headerStyle: {
