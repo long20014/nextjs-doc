@@ -79,7 +79,10 @@ function resolveSidebar() {
   }
 
   function createPage(page) {
-    return `${page.path}/${page.name}`;
+    return {
+      path: `/posts/${page.path}/${page.name}`,
+      label: page.title,
+    };
   }
 
   function addItemToSideBar(item) {
@@ -138,14 +141,11 @@ function resolveNavbarFromCategories() {
   const navbarItems = [];
   function addItemToNavBar(item) {
     const { title, pages, name } = item;
-    const categoryTitle = title;
     const initialPage = pages?.[0]?.name || '';
 
     navbarItems.push({
-      to: `/${name}/${initialPage}`,
+      to: `/posts/${name}/${initialPage}`,
       label: title,
-      position: 'left',
-      activeBaseRegex: `(${categoryTitle})`,
     });
   }
 
@@ -159,6 +159,12 @@ function resolveNavbarFromCategories() {
   categoryList.forEach((i) => {
     addItemToNavBar(i);
   });
+
+  fs.writeFileSync(
+    `${BUILT_DATA_DIR}/navbar.json`,
+    JSON.stringify({ navbarItems })
+  );
+
   return navbarItems;
 }
 

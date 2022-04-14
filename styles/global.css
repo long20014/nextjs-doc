@@ -25,3 +25,11 @@ img {
   max-width: 100%;
   display: block;
 }
+
+#sidebar ul {
+  display: none;
+}
+
+#sidebar .expand > ul {
+  display: block 
+}

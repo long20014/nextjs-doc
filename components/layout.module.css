@@ -1,7 +1,8 @@
 .container {
-  max-width: 36rem;
+  max-width: 1920px;
   padding: 0 1rem;
-  margin: 3rem auto 6rem;
+  margin: 0 auto;
+  height: 100vh;
 }
 
 .header {
@@ -12,4 +13,12 @@
 
 .backToHome {
   margin: 3rem 0 0;
+}
+
+.postContainer {
+  padding: 1em;
+  overflow-y: scroll;
+  height: calc(100vh - 6rem);
+  flex: 1; 
+  width: 100%;
 }
