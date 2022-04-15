@@ -1,5 +1,5 @@
 import utilStyles from '../styles/utils.module.css';
-import { useMemo } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import SidebarData from '../built-data/sidebar-tree.json';
 import NodeTree from './node-tree';
@@ -8,6 +8,7 @@ import { toCapitalize } from '../utils/format';
 import styles from './sidebar.module.css';
 
 export default function Sidebar() {
+  const [hide, setHide] = useState(false);
   const router = useRouter();
   const sidebarItems = SidebarData.sidebarItems;
   const sidebarPart = (() => {
@@ -25,14 +26,41 @@ export default function Sidebar() {
   const getSidebar = () => {
     return sidebarItems[`${toCapitalize(sidebarPart)}Sidebar`][0];
   };
+  const toggleHideSidebar = () => {
+    setHide((hide) => !hide);
+  };
+
+  const renderExpandSidebar = () => {
+    return (
+      <div className={styles.sidebar} id="sidebar">
+        <div className="expand tree-section">
+          {getSidebarName()}
+          <NodeTree items={items} />
+        </div>
+        <button
+          style={{ width: '100%', textAlign: 'center' }}
+          className={styles.button}
+          onClick={toggleHideSidebar}
+        >
+          {'<<'}
+        </button>
+      </div>
+    );
+  };
+
+  const renderHiddenSidebar = () => {
+    return (
+      <div
+        className={styles.hiddenSidebar}
+        id="sidebar"
+        onClick={toggleHideSidebar}
+      >
+        {'>>'}
+      </div>
+    );
+  };
+
   const sidebar = getSidebar();
   const items = sidebar.items;
-  return (
-    <div className={styles.sidebar} id="sidebar">
-      <div className="expand">
-        {getSidebarName()}
-        <NodeTree items={items} />
-      </div>
-    </div>
-  );
+  return !hide ? renderExpandSidebar() : renderHiddenSidebar();
 }

@@ -33,6 +33,7 @@ function Dropdown({ item }) {
     color: router.asPath.includes(`${item.path}/${item.name}`)
       ? 'red'
       : 'black',
+    cursor: 'pointer',
   };
   const [expand, setExpand] = useState(false);
 

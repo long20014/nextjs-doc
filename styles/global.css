@@ -33,3 +33,7 @@ img {
 #sidebar .expand > ul {
   display: block 
 }
+
+#sidebar .tree-section {
+  padding: 1em;
+}

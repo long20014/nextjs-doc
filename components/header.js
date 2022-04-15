@@ -10,11 +10,11 @@ const { config: navbarConfig } = headerData;
 
 const styles = {
   headerStyle: {
-    padding: '0 1.5em',
     borderBottom: '1px solid black',
     height: '3rem',
     display: 'flex',
     alignItems: 'center',
+    width: '100%',
   },
 };
 
@@ -50,10 +50,12 @@ function Title({ title }) {
 export default function Header() {
   return (
     <div style={styles.headerStyle}>
-      <NormalLink href="/">
-        <Logo src={navbarConfig.logo.src} />
-        <Title title={navbarConfig.title} />
-      </NormalLink>
+      <div style={{ width: '25vw', paddingLeft: '1em' }}>
+        <NormalLink href="/">
+          <Logo src={navbarConfig.logo.src} />
+          <Title title={navbarConfig.title} />
+        </NormalLink>
+      </div>
 
       {navbarItems.map((item) => {
         return (

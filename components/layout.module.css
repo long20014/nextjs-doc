@@ -1,8 +1,9 @@
 .container {
   max-width: 1920px;
-  padding: 0 1rem;
   margin: 0 auto;
   height: 100vh;
+  display: flex;
+  flex-flow: row wrap;
 }
 
 .header {
@@ -18,7 +19,13 @@
 .postContainer {
   padding: 1em;
   overflow-y: scroll;
+  flex: 1;
+  height: 100%;
+}
+
+.body { 
+  display: flex;
+  flex-flow: row wrap;
   height: calc(100vh - 6rem);
-  flex: 1; 
   width: 100%;
 }

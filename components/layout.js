@@ -29,7 +29,7 @@ export default function Layout({ children, home }) {
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
       <Header />
-      <div style={{ display: 'flex', flexDirection: 'row wrap' }}>
+      <div className={styles.body}>
         {!home && <Sidebar />}
         <main className={styles.postContainer}>
           {children}
