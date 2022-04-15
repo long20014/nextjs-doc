@@ -1,12 +1,13 @@
 .sidebar {
   padding: 1.5em;
-  min-width: 30vw;
+  width: 25vw;
   border-right: 1px solid black;
   height: calc(100vh - 6rem);
 }
 
 .sidebar li {
   list-style:none;
+
 }
 
 .sidebar ul {
