@@ -70,16 +70,20 @@ function resolveSidebar() {
       ? pageTitles.concat(childDropdowns)
       : pageTitles;
     const dropdown = {
-      type: 'category',
-      collapsible: true,
       label: item.title,
       items: items,
+      path: `/posts/${item.path}`,
+      name: item.name,
     };
     return dropdown;
   }
 
   function createPage(page) {
-    return `${page.path}/${page.name}`;
+    return {
+      to: `/posts/${page.path}/${page.name}`,
+      label: page.title,
+      path: `/posts/${page.path}`,
+    };
   }
 
   function addItemToSideBar(item) {
@@ -98,24 +102,7 @@ function resolveSidebar() {
     ];
   }
 
-  const {
-    categoryItems,
-    createdDate,
-  } = require('../../built-data/data-tree.json');
-  if (!fs.existsSync(`${BUILT_DATA_DIR}/sidebar-tree.json`)) {
-    fs.writeFileSync(
-      `${BUILT_DATA_DIR}/sidebar-tree.json`,
-      JSON.stringify({ dataTreeCreatedDate: 0, sidebarItems: {} })
-    );
-  }
-  const {
-    sidebarItems: oldSidebarItems,
-    dataTreeCreatedDate,
-  } = require('../../built-data/sidebar-tree.json');
-
-  if (oldSidebarItems && dataTreeCreatedDate === createdDate) {
-    return oldSidebarItems;
-  }
+  const { categoryItems } = require('../../built-data/data-tree.json');
 
   let sidebarItems = {};
 
@@ -129,23 +116,20 @@ function resolveSidebar() {
   });
   fs.writeFileSync(
     `${BUILT_DATA_DIR}/sidebar-tree.json`,
-    JSON.stringify({ dataTreeCreatedDate: createdDate, sidebarItems })
+    JSON.stringify({ sidebarItems })
   );
-  return sidebarItems;
 }
 
 function resolveNavbarFromCategories() {
   const navbarItems = [];
   function addItemToNavBar(item) {
     const { title, pages, name } = item;
-    const categoryTitle = title;
     const initialPage = pages?.[0]?.name || '';
 
     navbarItems.push({
-      to: `/${name}/${initialPage}`,
+      to: `/posts/${name}/${initialPage}`,
       label: title,
-      position: 'left',
-      activeBaseRegex: `(${categoryTitle})`,
+      path: `/posts/${name}`,
     });
   }
 
@@ -159,7 +143,11 @@ function resolveNavbarFromCategories() {
   categoryList.forEach((i) => {
     addItemToNavBar(i);
   });
-  return navbarItems;
+
+  fs.writeFileSync(
+    `${BUILT_DATA_DIR}/navbar.json`,
+    JSON.stringify({ navbarItems })
+  );
 }
 
 function deepCopy(obj) {

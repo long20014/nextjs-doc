@@ -25,3 +25,15 @@ img {
   max-width: 100%;
   display: block;
 }
+
+#sidebar ul {
+  display: none;
+}
+
+#sidebar .expand > ul {
+  display: block 
+}
+
+#sidebar .tree-section {
+  padding: 1em;
+}
