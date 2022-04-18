@@ -1,11 +1,10 @@
-import utilStyles from '../styles/utils.module.css';
 import { useState } from 'react';
-import Link from 'next/link';
 import SidebarData from '../built-data/sidebar-tree.json';
 import NodeTree from './node-tree';
 import { useRouter } from 'next/router';
 import { toCapitalize } from '../utils/format';
 import styles from './sidebar.module.css';
+import React from 'react';
 
 export default function Sidebar() {
   const [hide, setHide] = useState(false);

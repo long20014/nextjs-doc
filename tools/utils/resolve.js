@@ -87,7 +87,7 @@ function resolveSidebar() {
   }
 
   function addItemToSideBar(item) {
-    const { title, pages, dropdowns } = item;
+    const { title, pages, dropdowns, name } = item;
     const categoryTitle = title;
     const pageTitles = pages.map((page) => createPage(page));
     const childDropdowns = dropdowns.map((dropdown) =>
@@ -97,6 +97,8 @@ function resolveSidebar() {
       {
         type: 'category',
         label: categoryTitle,
+        name: name,
+        to: `/posts/${name}`,
         items: pageTitles.concat(childDropdowns),
       },
     ];
@@ -152,6 +154,49 @@ function resolveNavbarFromCategories() {
 
 function deepCopy(obj) {
   return JSON.parse(JSON.stringify(obj));
+}
+
+function createPostNavData() {
+  const postNavItems = [];
+  const { sidebarItems } = require('../../built-data/sidebar-tree.json');
+
+  function createPostNavItem(item, i) {
+    if (!item.items) {
+      const postNavItem = {
+        current: { label: item.label, link: item.to },
+        previous: null,
+        next: null,
+      };
+      postNavItems[i]['items'].push(postNavItem);
+    } else {
+      item.items.forEach((item) => createPostNavItem(item, i));
+    }
+  }
+
+  function addPrevAndNextLinkToPostNavItems(items) {
+    items.forEach((item, index) => {
+      if (index > 0) {
+        item.previous = items[index - 1].current;
+      }
+      if (index < items.length - 1) {
+        item.next = items[index + 1].current;
+      }
+    });
+  }
+  let i = 0;
+  for (const key in sidebarItems) {
+    postNavItems.push({ to: sidebarItems[key][0].to, items: [] });
+    sidebarItems[key][0].items.forEach((item) => {
+      createPostNavItem(item, i);
+    });
+    addPrevAndNextLinkToPostNavItems(postNavItems[i].items);
+    i++;
+  }
+
+  fs.writeFileSync(
+    `${BUILT_DATA_DIR}/post-nav-data.json`,
+    JSON.stringify({ postNavItems })
+  );
 }
 
 function createDataTrees() {
@@ -384,4 +429,5 @@ module.exports = {
   resolveNavbarFromCategories,
   createDocFiles,
   createDataTrees,
+  createPostNavData,
 };

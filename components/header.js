@@ -1,4 +1,4 @@
-import utilStyles from '../styles/utils.module.css';
+import React from 'react';
 import Link from 'next/link';
 import navbarData from '../built-data/navbar.json';
 import headerData from '../fetched-data/navbar-data.json';

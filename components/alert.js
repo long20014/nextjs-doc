@@ -1,5 +1,6 @@
 import styles from './alert.module.css';
 import cn from 'classnames';
+import React from 'react';
 
 export default function Alert({ children, type }) {
   return (

@@ -1,3 +1,4 @@
+import React from 'react';
 const styles = {
   footerStyle: {
     padding: '0 1.5em',
