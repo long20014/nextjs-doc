@@ -1,13 +1,10 @@
 import Head from 'next/head';
-import Image from 'next/image';
 import styles from './layout.module.css';
-import utilStyles from '../styles/utils.module.css';
-import Link from 'next/link';
 import Sidebar from './sidebar';
 import Header from './header';
 import Footer from './footer';
+import React from 'react';
 
-const name = 'Doc Templates';
 export const siteTitle = 'Next.js Sample Website';
 
 export default function Layout({ children, home }) {
@@ -31,16 +28,7 @@ export default function Layout({ children, home }) {
       <Header />
       <div className={styles.body}>
         {!home && <Sidebar />}
-        <main className={styles.postContainer}>
-          {children}
-          {!home && (
-            <div className={styles.backToHome}>
-              <Link href="/">
-                <a>← Back to home</a>
-              </Link>
-            </div>
-          )}
-        </main>
+        <main className={styles.postContainer}>{children}</main>
       </div>
       <Footer />
     </div>

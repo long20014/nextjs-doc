@@ -1,6 +1,4 @@
-import utilStyles from '../styles/utils.module.css';
-import { useMemo, useState } from 'react';
-import Link from 'next/link';
+import React, { useState } from 'react';
 import ActiveLink from './active-link';
 import { useRouter } from 'next/router';
 import constants from '../utils/constants';
@@ -13,15 +11,14 @@ export default function NodeTree({ items }) {
       {items.map((item) => {
         if (!item.items) {
           return (
-            <li key={item.name}>
+            <li key={item.to}>
               <ActiveLink href={item.to} path={item.path} type={SIDEBAR_LINK}>
                 {item.label}
               </ActiveLink>
             </li>
           );
-        } else {
-          return <Dropdown item={item} />;
         }
+        return <Dropdown key={item.name} item={item} />;
       })}
     </ul>
   );
@@ -47,7 +44,7 @@ function Dropdown({ item }) {
   };
 
   return (
-    <li key={item.name}>
+    <li>
       <div onClick={handleClick} style={style}>
         {expand ? '-' : '+'} {item.label}
       </div>

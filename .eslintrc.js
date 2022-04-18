@@ -33,5 +33,8 @@ module.exports = {
     'no-var': 'error',
     'no-console': 'warn',
     '@next/next/no-img-element': 'off',
+    'prettier/prettier': ['error', { singleQuote: true }],
+    'react/prop-types': 'off',
+    'no-unused-vars': 'off',
   },
 };

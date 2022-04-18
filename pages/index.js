@@ -3,7 +3,7 @@ import Layout, { siteTitle } from '../components/layout';
 import utilStyles from '../styles/utils.module.css';
 import Link from 'next/link';
 import { getSortedPostsData } from '../lib/posts';
-import Date from '../components/date';
+import React from 'react';
 
 export async function getStaticProps() {
   const allPostsData = getSortedPostsData();
@@ -36,9 +36,6 @@ export default function Home({ allPostsData }) {
                 <a>{title}</a>
               </Link>
               <br />
-              {/* <small className={utilStyles.lightText}>
-                <Date dateString={date} />
-              </small> */}
             </li>
           ))}
         </ul>
