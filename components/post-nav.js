@@ -3,13 +3,7 @@ import NormalLink from './normal-link';
 
 export default function PostNav({ postNavItem }) {
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        width: '100%',
-      }}
-    >
+    <div className="post-nav">
       {postNavItem.previous && (
         <NormalLink
           style={{ marginRight: 'auto' }}

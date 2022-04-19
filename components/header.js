@@ -4,36 +4,17 @@ import navbarData from '../built-data/navbar.json';
 import headerData from '../fetched-data/navbar-data.json';
 import ActiveLink from './active-link';
 import constants from '../utils/constants';
+import NormalLink from './normal-link';
 const { NAVBAR } = constants;
 const { navbarItems } = navbarData;
 const { config: navbarConfig } = headerData;
 
-const styles = {
-  headerStyle: {
-    borderBottom: '1px solid black',
-    height: '3rem',
-    display: 'flex',
-    alignItems: 'center',
-    width: '100%',
-  },
+const linkStyles = {
+  display: 'flex',
+  alignItems: 'center',
+  textDecoration: 'none',
+  color: 'black',
 };
-
-function NormalLink({ children, href }) {
-  return (
-    <Link href={href}>
-      <a
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          textDecoration: 'none',
-          color: 'black',
-        }}
-      >
-        {children}
-      </a>
-    </Link>
-  );
-}
 
 function Logo({ src }) {
   if (src.startsWith('img')) {
@@ -49,9 +30,9 @@ function Title({ title }) {
 
 export default function Header() {
   return (
-    <div style={styles.headerStyle}>
-      <div style={{ width: '25vw', paddingLeft: '1em' }}>
-        <NormalLink href="/">
+    <div id="header">
+      <div style={{ marginRight: '90px', paddingLeft: '1em' }}>
+        <NormalLink href="/" style={linkStyles}>
           <Logo src={navbarConfig.logo.src} />
           <Title title={navbarConfig.title} />
         </NormalLink>

@@ -3,7 +3,6 @@ import SidebarData from '../built-data/sidebar-tree.json';
 import NodeTree from './node-tree';
 import { useRouter } from 'next/router';
 import { toCapitalize } from '../utils/format';
-import styles from './sidebar.module.css';
 import React from 'react';
 
 export default function Sidebar() {
@@ -31,14 +30,14 @@ export default function Sidebar() {
 
   const renderExpandSidebar = () => {
     return (
-      <div className={styles.sidebar} id="sidebar">
+      <div className="sidebar" id="sidebar">
         <div className="expand tree-section">
           {getSidebarName()}
           <NodeTree items={items} />
         </div>
         <button
           style={{ width: '100%', textAlign: 'center' }}
-          className={styles.button}
+          className="button"
           onClick={toggleHideSidebar}
         >
           {'<<'}
@@ -49,11 +48,7 @@ export default function Sidebar() {
 
   const renderHiddenSidebar = () => {
     return (
-      <div
-        className={styles.hiddenSidebar}
-        id="sidebar"
-        onClick={toggleHideSidebar}
-      >
+      <div className="hidden-sidebar" id="sidebar" onClick={toggleHideSidebar}>
         {'>>'}
       </div>
     );
