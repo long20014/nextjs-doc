@@ -5,11 +5,14 @@
   flex-direction: column;
   justify-content: space-between;
   background-color: #fcfcfd;
-  height: 100%;
+  height: calc(100vh - 3rem); 
+  position: fixed;
+  top: 3rem;
+  z-index: 10;
 }
 
 .hiddenSidebar {
-  height: calc(100vh - 6rem);
+  height: 100%;
   border-right: 1px solid black;
   width: 30px;
   display: flex;
@@ -21,7 +24,10 @@
 
 .sidebar li {
   list-style:none;
+}
 
+.sidebar a {
+  text-decoration: none;
 }
 
 .sidebar ul {

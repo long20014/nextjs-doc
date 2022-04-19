@@ -10,19 +10,16 @@ const { postNavItems } = PostNavData;
 export default function Post({ postData, postNavItem }) {
   return (
     <Layout>
-      <div>
+      <div className="page-content">
         <Head>
           <title>{postData.title}</title>
         </Head>
         <article>
           <h1 className={utilStyles.headingXl}>{postData.title}</h1>
-          {/* <div className={utilStyles.lightText}>
-            <Date dateString={postData.date} />
-          </div> */}
           <div dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
         </article>
+        <PostNav postNavItem={postNavItem}></PostNav>
       </div>
-      <PostNav postNavItem={postNavItem}></PostNav>
     </Layout>
   );
 }

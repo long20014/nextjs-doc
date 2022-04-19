@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ActiveLink from './active-link';
 import { useRouter } from 'next/router';
 import constants from '../utils/constants';
+import useHover from '../hooks/useHover';
 
 const { SIDEBAR_LINK } = constants;
 
@@ -26,11 +27,17 @@ export default function NodeTree({ items }) {
 
 function Dropdown({ item }) {
   const router = useRouter();
-  const style = {
-    color: router.asPath.includes(`${item.path}/${item.name}`)
-      ? 'red'
-      : 'black',
-    cursor: 'pointer',
+  const [hoverRef, isHovered] = useHover();
+  const styles = {
+    common: {
+      cursor: 'pointer',
+    },
+    normal: {
+      color: router.asPath.includes(`${item.path}/${item.name}`) && 'red',
+    },
+    hover: {
+      color: 'hsl(206deg 81% 50%)',
+    },
   };
   const [expand, setExpand] = useState(false);
 
@@ -45,7 +52,15 @@ function Dropdown({ item }) {
 
   return (
     <li>
-      <div onClick={handleClick} style={style}>
+      <div
+        ref={hoverRef}
+        onClick={handleClick}
+        style={{
+          ...(isHovered ? styles.hover : styles.normal),
+          ...styles.common,
+        }}
+        className="sidebar-item light-gray-text"
+      >
         {expand ? '-' : '+'} {item.label}
       </div>
       <NodeTree items={item.items} />

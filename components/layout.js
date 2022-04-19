@@ -1,15 +1,15 @@
 import Head from 'next/head';
-import styles from './layout.module.css';
 import Sidebar from './sidebar';
 import Header from './header';
 import Footer from './footer';
 import React from 'react';
+import TableOfContent from './table-of-content';
 
 export const siteTitle = 'Next.js Sample Website';
 
 export default function Layout({ children, home }) {
   return (
-    <div className={styles.container}>
+    <div id="container">
       <Head>
         <link rel="icon" href="/favicon.ico" />
         <meta
@@ -25,10 +25,14 @@ export default function Layout({ children, home }) {
         <meta name="og:title" content={siteTitle} />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
+
       <Header />
-      <div className={styles.body}>
+      <div className="outer-container">
         {!home && <Sidebar />}
-        <main className={styles.postContainer}>{children}</main>
+        <main className="post-container">
+          {children}
+          {!home && <TableOfContent />}
+        </main>
       </div>
       <Footer />
     </div>
