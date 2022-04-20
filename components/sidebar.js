@@ -11,8 +11,15 @@ export default function Sidebar() {
   const sidebarItems = SidebarData.sidebarItems;
   const sidebarPart = (() => {
     const pathParts = router.asPath.split('/');
-    if (pathParts[2]) {
-      const categorySideBar = pathParts[2];
+    const postIndex = pathParts.indexOf('posts');
+    if (postIndex !== -1) {
+      let categorySideBar = pathParts[postIndex + 1];
+      if (
+        pathParts[postIndex + 1] === 'ja' ||
+        pathParts[postIndex + 1] === 'ko'
+      ) {
+        categorySideBar = pathParts[postIndex + 2];
+      }
       return categorySideBar;
     } else {
       throw new Error('category not found');

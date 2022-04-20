@@ -5,6 +5,7 @@ import headerData from '../fetched-data/navbar-data.json';
 import ActiveLink from './active-link';
 import constants from '../utils/constants';
 import NormalLink from './normal-link';
+import LanguageSelector from './language-selector';
 const { NAVBAR } = constants;
 const { navbarItems } = navbarData;
 const { config: navbarConfig } = headerData;
@@ -50,6 +51,7 @@ export default function Header() {
           </ActiveLink>
         );
       })}
+      <LanguageSelector></LanguageSelector>
     </div>
   );
 }

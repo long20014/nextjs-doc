@@ -7,6 +7,15 @@ const data = {
   pageItemsJa: null,
 };
 
+const getLocalePath = (locale) => {
+  return locale ? `/posts/${locale}` : '/posts';
+  // return '/posts';
+};
+
+const getLocaleFileName = (fileName, locale) => {
+  return locale ? `${fileName}-${locale}` : fileName;
+};
+
 const {
   POSTS_ROOT_DIR,
   JA_LOCALE_DIR,
@@ -59,7 +68,7 @@ const {
 } = require('./format');
 
 function resolveSidebar() {
-  function createDropdowns(item) {
+  function createDropdowns(item, locale) {
     const pageTitles = item.pages
       ? item.pages.map((page) => createPage(page))
       : [];
@@ -69,87 +78,118 @@ function resolveSidebar() {
     const items = childDropdowns
       ? pageTitles.concat(childDropdowns)
       : pageTitles;
+    const localePath = getLocalePath(locale);
     const dropdown = {
       label: item.title,
       items: items,
-      path: `/posts/${item.path}`,
+      path: `${localePath}/${item.path}`,
       name: item.name,
     };
     return dropdown;
   }
 
-  function createPage(page) {
+  function createPage(page, locale) {
+    const localePath = getLocalePath(locale);
     return {
-      to: `/posts/${page.path}/${page.name}`,
+      to: `${localePath}/${page.path}/${page.name}`,
       label: page.title,
-      path: `/posts/${page.path}`,
+      path: `${localePath}/${locale}/${page.path}`,
     };
   }
 
-  function addItemToSideBar(item) {
+  function addItemToSideBar(sidebarItems, item, locale) {
     const { title, pages, dropdowns, name } = item;
     const categoryTitle = title;
-    const pageTitles = pages.map((page) => createPage(page));
+    const pageTitles = pages.map((page) => createPage(page, locale));
     const childDropdowns = dropdowns.map((dropdown) =>
-      createDropdowns(dropdown)
+      createDropdowns(dropdown, locale)
     );
+    const localePath = getLocalePath(locale);
+
     sidebarItems[`${categoryTitle}Sidebar`] = [
       {
         type: 'category',
         label: categoryTitle,
         name: name,
-        to: `/posts/${name}`,
+        to: `${localePath}/${name}`,
         items: pageTitles.concat(childDropdowns),
       },
     ];
   }
 
   const { categoryItems } = require('../../built-data/data-tree.json');
+  const {
+    categoryItems: koCategoryItems,
+  } = require('../../built-data/data-tree-ko.json');
+  const {
+    categoryItems: jaCategoryItems,
+  } = require('../../built-data/data-tree-ja.json');
 
-  let sidebarItems = {};
+  function buildSidebarTree(categoryItems, locale) {
+    let sidebarItems = {};
 
-  const categoryList =
-    !categoryItems || categoryItems.length === 0
-      ? defaultCategoryItems
-      : categoryItems;
+    const categoryList =
+      !categoryItems || categoryItems.length === 0
+        ? defaultCategoryItems
+        : categoryItems;
 
-  categoryList.forEach((i) => {
-    addItemToSideBar(i);
-  });
-  fs.writeFileSync(
-    `${BUILT_DATA_DIR}/sidebar-tree.json`,
-    JSON.stringify({ sidebarItems })
-  );
+    categoryList.forEach((item) => {
+      addItemToSideBar(sidebarItems, item, locale);
+    });
+    const fileName = getLocaleFileName('sidebar-tree', locale);
+
+    fs.writeFileSync(
+      `${BUILT_DATA_DIR}/${fileName}.json`,
+      JSON.stringify({ sidebarItems })
+    );
+  }
+  buildSidebarTree(categoryItems);
+  buildSidebarTree(koCategoryItems, 'ko');
+  buildSidebarTree(jaCategoryItems, 'ja');
 }
 
 function resolveNavbarFromCategories() {
-  const navbarItems = [];
-  function addItemToNavBar(item) {
-    const { title, pages, name } = item;
-    const initialPage = pages?.[0]?.name || '';
-
-    navbarItems.push({
-      to: `/posts/${name}/${initialPage}`,
-      label: title,
-      path: `/posts/${name}`,
-    });
-  }
-
   const { categoryItems } = require('../../built-data/data-tree.json');
+  const {
+    categoryItems: koCategoryItems,
+  } = require('../../built-data/data-tree-ko.json');
+  const {
+    categoryItems: jaCategoryItems,
+  } = require('../../built-data/data-tree-ja.json');
 
-  const categoryList =
-    !categoryItems || categoryItems.length === 0
-      ? defaultCategoryItems
-      : categoryItems;
+  function createNavbarDataForLocale(categoryItems, locale) {
+    const navbarItems = [];
 
-  categoryList.forEach((i) => {
-    addItemToNavBar(i);
-  });
+    function addItemToNavBar(item, locale) {
+      const { title, pages, name } = item;
+      const initialPage = pages?.[0]?.name || '';
+      const localePath = getLocalePath(locale);
+      navbarItems.push({
+        to: `${localePath}/${name}/${initialPage}`,
+        label: title,
+        path: `${localePath}/${name}`,
+      });
+    }
 
-  fs.writeFileSync(
-    `${BUILT_DATA_DIR}/navbar.json`,
-    JSON.stringify({ navbarItems })
-  );
+    const categoryList =
+      !categoryItems || categoryItems.length === 0
+        ? defaultCategoryItems
+        : categoryItems;
+
+    categoryList.forEach((item) => {
+      addItemToNavBar(item, locale);
+    });
+
+    const fileName = getLocaleFileName('navbar', locale);
+
+    fs.writeFileSync(
+      `${BUILT_DATA_DIR}/${fileName}.json`,
+      JSON.stringify({ navbarItems })
+    );
+  }
+  createNavbarDataForLocale(categoryItems);
+  createNavbarDataForLocale(koCategoryItems, 'ko');
+  createNavbarDataForLocale(jaCategoryItems, 'ja');
 }
 
 function deepCopy(obj) {
@@ -157,46 +197,60 @@ function deepCopy(obj) {
 }
 
 function createPostNavData() {
-  const postNavItems = [];
   const { sidebarItems } = require('../../built-data/sidebar-tree.json');
+  const {
+    sidebarItems: koSidebarItems,
+  } = require('../../built-data/sidebar-tree-ko.json');
+  const {
+    sidebarItems: jaSidebarItems,
+  } = require('../../built-data/sidebar-tree-ja.json');
 
-  function createPostNavItem(item, i) {
-    if (!item.items) {
-      const postNavItem = {
-        current: { label: item.label, link: item.to },
-        previous: null,
-        next: null,
-      };
-      postNavItems[i]['items'].push(postNavItem);
-    } else {
-      item.items.forEach((item) => createPostNavItem(item, i));
+  function createPostNavDataLocale(sidebarItems, locale) {
+    const postNavItems = [];
+    function createPostNavItem(item, i) {
+      if (!item.items) {
+        const postNavItem = {
+          current: { label: item.label, link: item.to },
+          previous: null,
+          next: null,
+        };
+        postNavItems[i]['items'].push(postNavItem);
+      } else {
+        item.items.forEach((item) => createPostNavItem(item, i));
+      }
     }
+
+    function addPrevAndNextLinkToPostNavItems(items) {
+      items.forEach((item, index) => {
+        if (index > 0) {
+          item.previous = items[index - 1].current;
+        }
+        if (index < items.length - 1) {
+          item.next = items[index + 1].current;
+        }
+      });
+    }
+    let i = 0;
+    for (const key in sidebarItems) {
+      postNavItems.push({ to: sidebarItems[key][0].to, items: [] });
+      sidebarItems[key][0].items.forEach((item) => {
+        createPostNavItem(item, i);
+      });
+      addPrevAndNextLinkToPostNavItems(postNavItems[i].items);
+      i++;
+    }
+
+    const fileName = getLocaleFileName('post-nav-data', locale);
+
+    fs.writeFileSync(
+      `${BUILT_DATA_DIR}/${fileName}.json`,
+      JSON.stringify({ postNavItems })
+    );
   }
 
-  function addPrevAndNextLinkToPostNavItems(items) {
-    items.forEach((item, index) => {
-      if (index > 0) {
-        item.previous = items[index - 1].current;
-      }
-      if (index < items.length - 1) {
-        item.next = items[index + 1].current;
-      }
-    });
-  }
-  let i = 0;
-  for (const key in sidebarItems) {
-    postNavItems.push({ to: sidebarItems[key][0].to, items: [] });
-    sidebarItems[key][0].items.forEach((item) => {
-      createPostNavItem(item, i);
-    });
-    addPrevAndNextLinkToPostNavItems(postNavItems[i].items);
-    i++;
-  }
-
-  fs.writeFileSync(
-    `${BUILT_DATA_DIR}/post-nav-data.json`,
-    JSON.stringify({ postNavItems })
-  );
+  createPostNavDataLocale(sidebarItems);
+  createPostNavDataLocale(koSidebarItems, 'ko');
+  createPostNavDataLocale(jaSidebarItems, 'ja');
 }
 
 function createDataTrees() {

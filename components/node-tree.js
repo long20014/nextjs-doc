@@ -33,7 +33,9 @@ function Dropdown({ item }) {
       cursor: 'pointer',
     },
     normal: {
-      color: router.asPath.includes(`${item.path}/${item.name}`) && 'red',
+      color: router.asPath.includes(`${item.path}/${item.name}`)
+        ? 'red'
+        : '#82888f',
     },
     hover: {
       color: 'hsl(206deg 81% 50%)',
