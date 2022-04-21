@@ -36,5 +36,6 @@ module.exports = {
     'prettier/prettier': ['error', { singleQuote: true }],
     'react/prop-types': 'off',
     'no-unused-vars': 'off',
+    'no-empty-pattern': 'off',
   },
 };

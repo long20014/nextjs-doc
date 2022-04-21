@@ -16,11 +16,7 @@ const getLocaleFileName = (fileName, locale) => {
   return locale ? `${fileName}-${locale}` : fileName;
 };
 
-const {
-  POSTS_ROOT_DIR,
-  JA_LOCALE_DIR,
-  KO_LOCALE_DIR,
-} = require('../constants');
+const { EN_LOCALE_DIR, JA_LOCALE_DIR, KO_LOCALE_DIR } = require('../constants');
 const { FETCHED_DATA_DIR, BUILT_DATA_DIR } = require('../constants');
 
 const { sortItems } = require('./sort');
@@ -70,11 +66,11 @@ const {
 function resolveSidebar() {
   function createDropdowns(item, locale) {
     const pageTitles = item.pages
-      ? item.pages.map((page) => createPage(page))
+      ? item.pages.map((page) => createPage(page, locale))
       : [];
     const childDropdowns =
       item.dropdowns &&
-      item.dropdowns.map((dropdown) => createDropdowns(dropdown));
+      item.dropdowns.map((dropdown) => createDropdowns(dropdown, locale));
     const items = childDropdowns
       ? pageTitles.concat(childDropdowns)
       : pageTitles;
@@ -93,7 +89,7 @@ function resolveSidebar() {
     return {
       to: `${localePath}/${page.path}/${page.name}`,
       label: page.title,
-      path: `${localePath}/${locale}/${page.path}`,
+      path: `${localePath}/${page.path}`,
     };
   }
 
@@ -143,7 +139,7 @@ function resolveSidebar() {
       JSON.stringify({ sidebarItems })
     );
   }
-  buildSidebarTree(categoryItems);
+  buildSidebarTree(categoryItems, 'en');
   buildSidebarTree(koCategoryItems, 'ko');
   buildSidebarTree(jaCategoryItems, 'ja');
 }
@@ -187,7 +183,7 @@ function resolveNavbarFromCategories() {
       JSON.stringify({ navbarItems })
     );
   }
-  createNavbarDataForLocale(categoryItems);
+  createNavbarDataForLocale(categoryItems, 'en');
   createNavbarDataForLocale(koCategoryItems, 'ko');
   createNavbarDataForLocale(jaCategoryItems, 'ja');
 }
@@ -197,7 +193,7 @@ function deepCopy(obj) {
 }
 
 function createPostNavData() {
-  const { sidebarItems } = require('../../built-data/sidebar-tree.json');
+  const { sidebarItems } = require('../../built-data/sidebar-tree-en.json');
   const {
     sidebarItems: koSidebarItems,
   } = require('../../built-data/sidebar-tree-ko.json');
@@ -248,7 +244,7 @@ function createPostNavData() {
     );
   }
 
-  createPostNavDataLocale(sidebarItems);
+  createPostNavDataLocale(sidebarItems, 'en');
   createPostNavDataLocale(koSidebarItems, 'ko');
   createPostNavDataLocale(jaSidebarItems, 'ja');
 }
@@ -461,7 +457,7 @@ function createDocFiles() {
     } = require('../../built-data/data-tree-ko.json');
 
     categoryItems.forEach((i, index) => {
-      createFilesFromCategoryData(POSTS_ROOT_DIR, i, index);
+      createFilesFromCategoryData(EN_LOCALE_DIR, i, index);
     });
 
     jaCategoryItems.forEach((i, index) => {

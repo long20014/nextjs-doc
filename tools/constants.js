@@ -1,6 +1,7 @@
 module.exports = {
   PAGES_ROOT_DIR: 'pages',
   POSTS_ROOT_DIR: 'posts',
+  EN_LOCALE_DIR: 'posts/en',
   JA_LOCALE_DIR: 'posts/ja',
   KO_LOCALE_DIR: 'posts/ko',
   CONFIG_DIR: './src/config',
