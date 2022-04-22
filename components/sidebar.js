@@ -1,25 +1,39 @@
-import { useState } from 'react';
-import SidebarData from '../built-data/sidebar-tree.json';
 import NodeTree from './node-tree';
 import { useRouter } from 'next/router';
 import { toCapitalize } from '../utils/format';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLangContext } from '../contexts/language/index';
+
+import SidebarDataEn from '../built-data/sidebar-tree.json';
+import SidebarDataKo from '../built-data/sidebar-tree-ko.json';
+import SidebarDataJa from '../built-data/sidebar-tree-ja.json';
+
+const getSidebarItems = (locale) => {
+  let sidebarItems = SidebarDataEn.sidebarItems;
+  if (locale === 'ko') {
+    sidebarItems = SidebarDataKo.sidebarItems;
+  }
+  if (locale === 'ja') {
+    sidebarItems = SidebarDataJa.sidebarItems;
+  }
+  return sidebarItems;
+};
 
 export default function Sidebar() {
   const [hide, setHide] = useState(false);
+  const { state } = useLangContext();
+  const [sidebarItems, setSidebarItems] = useState(getSidebarItems(state.lang));
   const router = useRouter();
-  const sidebarItems = SidebarData.sidebarItems;
-  const sidebarPart = (() => {
+
+  useEffect(() => {
+    setSidebarItems(getSidebarItems(state.lang));
+  }, [state.lang]);
+
+  const sidebarPart = (function getSidebarPart() {
     const pathParts = router.asPath.split('/');
     const postIndex = pathParts.indexOf('posts');
     if (postIndex !== -1) {
       let categorySideBar = pathParts[postIndex + 1];
-      if (
-        pathParts[postIndex + 1] === 'ja' ||
-        pathParts[postIndex + 1] === 'ko'
-      ) {
-        categorySideBar = pathParts[postIndex + 2];
-      }
       return categorySideBar;
     } else {
       throw new Error('category not found');

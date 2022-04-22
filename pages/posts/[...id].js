@@ -47,7 +47,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params, locale }) {
-  const postData = await getPostData(params.id);
+  const postData = await getPostData(params.id, locale);
   const path = `/posts/${params.id.join('/')}`;
   // console.log(`locale: ${params.id}`);
   const postNavItems = getPostNavItems(locale);

@@ -6,4 +6,5 @@ module.exports = {
   CONFIG_DIR: './src/config',
   FETCHED_DATA_DIR: 'fetched-data',
   BUILT_DATA_DIR: 'built-data',
+  DEFAULT_LOCALE: 'en',
 };

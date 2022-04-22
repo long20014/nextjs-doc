@@ -8,8 +8,8 @@ const data = {
 };
 
 const getLocalePath = (locale) => {
-  return locale ? `/posts/${locale}` : '/posts';
-  // return '/posts';
+  // return locale ? `/posts/${locale}` : '/posts';
+  return '/posts';
 };
 
 const getLocaleFileName = (fileName, locale) => {
@@ -20,6 +20,7 @@ const {
   POSTS_ROOT_DIR,
   JA_LOCALE_DIR,
   KO_LOCALE_DIR,
+  DEFAULT_LOCALE,
 } = require('../constants');
 const { FETCHED_DATA_DIR, BUILT_DATA_DIR } = require('../constants');
 
@@ -376,32 +377,23 @@ function createDataTrees() {
 }
 
 function createDocFiles() {
-  function createFilesFromCategoryData(rootDir, item, index) {
+  function createFilesFromCategoryData(rootDir, item, locale) {
     const { title, pages, dropdowns, name } = item;
 
     let categoryDir = `${rootDir}/${name}`;
 
-    if (fs.existsSync(categoryDir)) {
-      fs.rmSync(categoryDir, { recursive: true, force: true });
-    }
+    // if (fs.existsSync(categoryDir)) {
+    //   fs.rmSync(categoryDir, { recursive: true, force: true });
+    // }
     fs.mkdirSync(categoryDir, { recursive: true });
-
-    // const categoryJsonConfig = {
-    //   label: title,
-    //   position: index + 1,
-    // };
-    // fs.writeFileSync(
-    //   `${categoryDir}/_category_.json`,
-    //   JSON.stringify(categoryJsonConfig)
-    // );
 
     function createDropdowns(dropdowns) {
       dropdowns.forEach((dropdown) => {
         const { path, pages, dropdowns, name } = dropdown;
         const dir = `${rootDir}/${path}/${name}`;
-        if (fs.existsSync(dir)) {
-          fs.rmSync(dir, { recursive: true, force: true });
-        }
+        // if (fs.existsSync(dir)) {
+        //   fs.rmSync(dir, { recursive: true, force: true });
+        // }
         fs.mkdirSync(dir, { recursive: true });
         if (pages) createPageFiles(pages);
         if (dropdowns) createDropdowns(dropdowns);
@@ -441,8 +433,11 @@ function createDocFiles() {
           updatedAt,
           pageContent
         );
-
-        fs.writeFileSync(`${rootDir}/${path}/${name}.md`, markdownContent);
+        const fileName =
+          locale === DEFAULT_LOCALE ? `index` : `index.${locale}`;
+        const dir = `${rootDir}/${path}/${name}`;
+        fs.mkdirSync(dir, { recursive: true });
+        fs.writeFileSync(`${dir}/${fileName}.md`, markdownContent);
       });
     }
 
@@ -460,16 +455,19 @@ function createDocFiles() {
       categoryItems: koCategoryItems,
     } = require('../../built-data/data-tree-ko.json');
 
-    categoryItems.forEach((i, index) => {
-      createFilesFromCategoryData(POSTS_ROOT_DIR, i, index);
+    if (fs.existsSync(POSTS_ROOT_DIR)) {
+      fs.rmSync(POSTS_ROOT_DIR, { recursive: true, force: true });
+    }
+    categoryItems.forEach((item) => {
+      createFilesFromCategoryData(POSTS_ROOT_DIR, item, DEFAULT_LOCALE);
     });
 
-    jaCategoryItems.forEach((i, index) => {
-      createFilesFromCategoryData(JA_LOCALE_DIR, i, index);
+    jaCategoryItems.forEach((item) => {
+      createFilesFromCategoryData(POSTS_ROOT_DIR, item, 'ja');
     });
 
-    koCategoryItems.forEach((i, index) => {
-      createFilesFromCategoryData(KO_LOCALE_DIR, i, index);
+    koCategoryItems.forEach((item) => {
+      createFilesFromCategoryData(POSTS_ROOT_DIR, item, 'ko');
     });
 
     console.log('✅ Doc files are created successfully');

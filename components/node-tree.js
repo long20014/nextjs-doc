@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ActiveLink from './active-link';
 import { useRouter } from 'next/router';
 import constants from '../utils/constants';
@@ -41,6 +41,7 @@ function Dropdown({ item }) {
       color: 'hsl(206deg 81% 50%)',
     },
   };
+
   const [expand, setExpand] = useState(false);
 
   const handleClick = (e) => {
@@ -51,6 +52,8 @@ function Dropdown({ item }) {
       e.target.parentNode.classList.remove('expand');
     }
   };
+
+  useEffect(() => {}, [router.asPath]);
 
   return (
     <li>

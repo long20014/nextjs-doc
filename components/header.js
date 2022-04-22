@@ -1,14 +1,27 @@
-import React from 'react';
-import Link from 'next/link';
-import navbarData from '../built-data/navbar.json';
+import React, { useEffect, useState } from 'react';
+import navbarDataEn from '../built-data/navbar.json';
+import navbarDataJa from '../built-data/navbar-ja.json';
+import navbarDataKo from '../built-data/navbar-ko.json';
 import headerData from '../fetched-data/navbar-data.json';
 import ActiveLink from './active-link';
 import constants from '../utils/constants';
 import NormalLink from './normal-link';
 import LanguageSelector from './language-selector';
+import { useLangContext } from '../contexts/language/index';
+
 const { NAVBAR } = constants;
-const { navbarItems } = navbarData;
 const { config: navbarConfig } = headerData;
+
+const getNavbarItems = (locale) => {
+  let navbarItems = navbarDataEn.navbarItems;
+  if (locale === 'ko') {
+    navbarItems = navbarDataKo.navbarItems;
+  }
+  if (locale === 'ja') {
+    navbarItems = navbarDataJa.navbarItems;
+  }
+  return navbarItems;
+};
 
 const linkStyles = {
   display: 'flex',
@@ -30,6 +43,13 @@ function Title({ title }) {
 }
 
 export default function Header() {
+  const { state } = useLangContext();
+  const [navbarItems, setNavbarItems] = useState(getNavbarItems(state.lang));
+
+  useEffect(() => {
+    setNavbarItems(getNavbarItems(state.lang));
+  }, [state.lang]);
+
   return (
     <div id="header">
       <div style={{ marginRight: '90px', paddingLeft: '1em' }}>
