@@ -38,8 +38,6 @@ export default function Post({ postData, postNavItem }) {
 
 export async function getStaticPaths() {
   const paths = getAllPostIds();
-
-  // console.log(paths[0]);
   return {
     paths,
     fallback: false,
@@ -49,11 +47,8 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params, locale }) {
   const postData = await getPostData(params.id, locale);
   const path = `/posts/${params.id.join('/')}`;
-  // console.log(`locale: ${params.id}`);
   const postNavItems = getPostNavItems(locale);
   const sideBarData = postNavItems.find((item) => {
-    // console.log('path: ' + path);
-    // console.log(item.to);
     return path.includes(item.to);
   });
   const postNavItem = sideBarData.items.find((item) => {

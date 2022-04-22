@@ -105,27 +105,27 @@ export default function TableOfContent({}) {
 
   const renderTOCItem = (item) => {
     const { dom, children } = item;
-    const { textContent } = dom;
+    const { innerText: headerContent } = dom;
     if (children) {
       return (
-        <li key={textContent}>
+        <li key={headerContent}>
           <span
             style={order === item.order ? styles.hover : styles.normal}
             onClick={(e) => handleClick(dom, e)}
           >
-            {textContent}
+            {headerContent}
           </span>
           <ul>{children.map((child) => renderTOCItem(child))}</ul>
         </li>
       );
     }
     return (
-      <li key={textContent}>
+      <li key={headerContent}>
         <span
           style={order === item.order ? styles.hover : styles.normal}
           onClick={(e) => handleClick(dom, e)}
         >
-          {textContent}
+          {headerContent}
         </span>
       </li>
     );
