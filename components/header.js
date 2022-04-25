@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import navbarDataEn from '../built-data/navbar.json';
 import headerData from '../fetched-data/navbar-data.json';
 import ActiveLink from './active-link';
 import constants from '../utils/constants';
 import NormalLink from './normal-link';
 import LanguageSelector from './language-selector';
-import { useLangContext } from '../contexts/language/index';
 
 const { NAVBAR } = constants;
 const { config: navbarConfig } = headerData;
@@ -30,18 +29,17 @@ function Title({ title }) {
 }
 
 export default function Header() {
-  const { state } = useLangContext();
   let navbarItems = navbarDataEn.navbarItems;
 
   return (
     <div id="header">
-      <div class="logo-section">
+      <div className="logo-section">
         <NormalLink href="/" style={linkStyles}>
           <Logo src={navbarConfig.logo.src} />
           <Title title={navbarConfig.title} />
         </NormalLink>
       </div>
-      <div class="nav-section">
+      <div className="nav-section">
         {navbarItems.map((item) => {
           return (
             <ActiveLink
@@ -55,7 +53,7 @@ export default function Header() {
           );
         })}
       </div>
-      <div class="right-section">
+      <div className="right-section">
         <LanguageSelector></LanguageSelector>
       </div>
     </div>

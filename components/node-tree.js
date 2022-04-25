@@ -3,10 +3,19 @@ import ActiveLink from './active-link';
 import { useRouter } from 'next/router';
 import constants from '../utils/constants';
 import useHover from '../hooks/useHover';
+import classNames from 'classnames';
 
 const { SIDEBAR_LINK } = constants;
 
-export default function NodeTree({ items }) {
+export default function Root({ items }) {
+  return (
+    <div className="node-tree expand">
+      <NodeTree items={items} />
+    </div>
+  );
+}
+
+function NodeTree({ items }) {
   return (
     <ul>
       {items.map((item) => {
@@ -28,38 +37,45 @@ export default function NodeTree({ items }) {
 function Dropdown({ item }) {
   const router = useRouter();
   const [hoverRef, isHovered] = useHover();
+  const isActive = (() => {
+    return router.asPath.includes(`${item.path}/${item.name}`);
+  })();
   const styles = {
     common: {
       cursor: 'pointer',
     },
     normal: {
-      color: router.asPath.includes(`${item.path}/${item.name}`)
-        ? 'red'
-        : '#82888f',
+      color: isActive ? 'red' : '#82888f',
     },
     hover: {
       color: 'hsl(206deg 81% 50%)',
     },
   };
 
-  const [expand, setExpand] = useState(false);
+  const [expand, setExpand] = useState(item.isExpanded);
 
-  const handleClick = (e) => {
+  const handleClick = (target) => {
     setExpand((expand) => !expand);
     if (!expand) {
-      e.target.parentNode.classList.add('expand');
+      target.parentNode.classList.add('expand');
     } else {
-      e.target.parentNode.classList.remove('expand');
+      target.parentNode.classList.remove('expand');
     }
   };
 
-  useEffect(() => {}, [router.asPath]);
+  useEffect(() => {
+    if (isActive) {
+      if (!expand) {
+        handleClick(hoverRef.current);
+      }
+    }
+  }, [router.asPath]);
 
   return (
-    <li>
+    <li className={classNames({ expand: item.isExpanded })}>
       <div
         ref={hoverRef}
-        onClick={handleClick}
+        onClick={(e) => handleClick(e.target)}
         style={{
           ...(isHovered ? styles.hover : styles.normal),
           ...styles.common,

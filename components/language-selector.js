@@ -1,10 +1,7 @@
 import React, { useEffect, useRef } from 'react';
-import { useLangContext } from '../contexts/language/index';
-import { changeLang } from '../contexts/language/action';
 import { useRouter } from 'next/router';
 
 export default function languageSelector() {
-  const { dispatch, state } = useLangContext();
   const selectRef = useRef(null);
   const router = useRouter();
   const languageList = [
@@ -14,18 +11,19 @@ export default function languageSelector() {
   ];
 
   useEffect(() => {
-    if (selectRef.current.value !== state.lang) {
-      selectRef.current.value = state.lang;
+    if (selectRef.current.value !== router.locale) {
+      selectRef.current.value = router.locale;
     }
   }, []);
 
+  useEffect(() => {
+    changeLanguage(router.locale);
+  }, [router.locale]);
+
   const changeLanguage = (language) => {
     const { pathname, asPath, query } = router;
-    localStorage.setItem('lang', language);
-    const lang = localStorage.getItem('lang') || 'ko';
-    changeLang(dispatch, lang);
     router.push({ pathname, query }, asPath, {
-      locale: lang,
+      locale: language,
     });
   };
 
@@ -34,7 +32,7 @@ export default function languageSelector() {
       <select
         id="language-selector"
         onChange={(e) => changeLanguage(e.target.value)}
-        value={state.lang}
+        value={router.locale}
         ref={selectRef}
       >
         {languageList.map((item) => {

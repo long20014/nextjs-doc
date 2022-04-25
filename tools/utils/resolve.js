@@ -84,6 +84,7 @@ function resolveSidebar() {
       items: items,
       path: `${rootPath}/${item.path}`,
       name: item.name,
+      isExpanded: false,
     };
     return dropdown;
   }
@@ -110,8 +111,10 @@ function resolveSidebar() {
       {
         type: 'category',
         label: categoryTitle,
+        path: rootPath,
         name: name,
         to: `${rootPath}/${name}`,
+        isExpanded: true,
         items: pageTitles.concat(childDropdowns),
       },
     ];
