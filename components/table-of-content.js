@@ -31,7 +31,7 @@ export default function TableOfContent({}) {
     setHeaders(headers);
     const TOC = createTOC(headers);
     setTOC(TOC);
-  }, [router.asPath]);
+  }, [router.asPath, router.locale]);
 
   const handleClick = (dom, e) => {
     e.preventDefault();
