@@ -40,7 +40,7 @@ export default function Sidebar() {
     }
   })();
   const getSidebarName = () => {
-    return `${toCapitalize(sidebarPart)} Sidebar`;
+    return `${toCapitalize(sidebarPart)}`;
   };
   const getSidebar = () => {
     return sidebarItems[`${toCapitalize(sidebarPart)}Sidebar`][0];

@@ -44,6 +44,7 @@ img {
   top: 0;
   z-index: 15;
   background-color: white;
+  padding: 0 1rem;
 };
 
 #container {
@@ -216,4 +217,13 @@ img {
 
 .red-text {
   color: red;
+}
+
+#header .right-section {
+  margin-left: auto;
+  display: flex;  
+}
+
+#header .logo-section {
+  margin-right: 90px;
 }

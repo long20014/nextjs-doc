@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import navbarDataEn from '../built-data/navbar.json';
-import navbarDataJa from '../built-data/navbar-ja.json';
-import navbarDataKo from '../built-data/navbar-ko.json';
 import headerData from '../fetched-data/navbar-data.json';
 import ActiveLink from './active-link';
 import constants from '../utils/constants';
@@ -11,17 +9,6 @@ import { useLangContext } from '../contexts/language/index';
 
 const { NAVBAR } = constants;
 const { config: navbarConfig } = headerData;
-
-const getNavbarItems = (locale) => {
-  let navbarItems = navbarDataEn.navbarItems;
-  if (locale === 'ko') {
-    navbarItems = navbarDataKo.navbarItems;
-  }
-  if (locale === 'ja') {
-    navbarItems = navbarDataJa.navbarItems;
-  }
-  return navbarItems;
-};
 
 const linkStyles = {
   display: 'flex',
@@ -44,34 +31,33 @@ function Title({ title }) {
 
 export default function Header() {
   const { state } = useLangContext();
-  const [navbarItems, setNavbarItems] = useState(getNavbarItems(state.lang));
-
-  useEffect(() => {
-    setNavbarItems(getNavbarItems(state.lang));
-  }, [state.lang]);
+  let navbarItems = navbarDataEn.navbarItems;
 
   return (
     <div id="header">
-      <div style={{ marginRight: '90px', paddingLeft: '1em' }}>
+      <div class="logo-section">
         <NormalLink href="/" style={linkStyles}>
           <Logo src={navbarConfig.logo.src} />
           <Title title={navbarConfig.title} />
         </NormalLink>
       </div>
-
-      {navbarItems.map((item) => {
-        return (
-          <ActiveLink
-            key={item.to}
-            href={item.to}
-            path={item.path}
-            type={NAVBAR}
-          >
-            {item.label}
-          </ActiveLink>
-        );
-      })}
-      <LanguageSelector></LanguageSelector>
+      <div class="nav-section">
+        {navbarItems.map((item) => {
+          return (
+            <ActiveLink
+              key={item.to}
+              href={item.to}
+              path={item.path}
+              type={NAVBAR}
+            >
+              {item.label}
+            </ActiveLink>
+          );
+        })}
+      </div>
+      <div class="right-section">
+        <LanguageSelector></LanguageSelector>
+      </div>
     </div>
   );
 }

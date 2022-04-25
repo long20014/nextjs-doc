@@ -7,8 +7,7 @@ const data = {
   pageItemsJa: null,
 };
 
-const getLocalePath = (locale) => {
-  // return locale ? `/posts/${locale}` : '/posts';
+const getRootPath = () => {
   return '/posts';
 };
 
@@ -69,7 +68,7 @@ const {
 } = require('./format');
 
 function resolveSidebar() {
-  function createDropdowns(item, locale) {
+  function createDropdowns(item) {
     const pageTitles = item.pages
       ? item.pages.map((page) => createPage(page))
       : [];
@@ -79,40 +78,40 @@ function resolveSidebar() {
     const items = childDropdowns
       ? pageTitles.concat(childDropdowns)
       : pageTitles;
-    const localePath = getLocalePath(locale);
+    const rootPath = getRootPath();
     const dropdown = {
       label: item.title,
       items: items,
-      path: `${localePath}/${item.path}`,
+      path: `${rootPath}/${item.path}`,
       name: item.name,
     };
     return dropdown;
   }
 
-  function createPage(page, locale) {
-    const localePath = getLocalePath(locale);
+  function createPage(page) {
+    const rootPath = getRootPath();
     return {
-      to: `${localePath}/${page.path}/${page.name}`,
+      to: `${rootPath}/${page.path}/${page.name}`,
       label: page.title,
-      path: `${localePath}/${locale}/${page.path}`,
+      path: `${rootPath}/${page.path}`,
     };
   }
 
-  function addItemToSideBar(sidebarItems, item, locale) {
+  function addItemToSideBar(sidebarItems, item) {
     const { title, pages, dropdowns, name } = item;
     const categoryTitle = title;
-    const pageTitles = pages.map((page) => createPage(page, locale));
+    const pageTitles = pages.map((page) => createPage(page));
     const childDropdowns = dropdowns.map((dropdown) =>
-      createDropdowns(dropdown, locale)
+      createDropdowns(dropdown)
     );
-    const localePath = getLocalePath(locale);
+    const rootPath = getRootPath();
 
     sidebarItems[`${categoryTitle}Sidebar`] = [
       {
         type: 'category',
         label: categoryTitle,
         name: name,
-        to: `${localePath}/${name}`,
+        to: `${rootPath}/${name}`,
         items: pageTitles.concat(childDropdowns),
       },
     ];
@@ -135,7 +134,7 @@ function resolveSidebar() {
         : categoryItems;
 
     categoryList.forEach((item) => {
-      addItemToSideBar(sidebarItems, item, locale);
+      addItemToSideBar(sidebarItems, item);
     });
     const fileName = getLocaleFileName('sidebar-tree', locale);
 
@@ -151,24 +150,18 @@ function resolveSidebar() {
 
 function resolveNavbarFromCategories() {
   const { categoryItems } = require('../../built-data/data-tree.json');
-  const {
-    categoryItems: koCategoryItems,
-  } = require('../../built-data/data-tree-ko.json');
-  const {
-    categoryItems: jaCategoryItems,
-  } = require('../../built-data/data-tree-ja.json');
 
   function createNavbarDataForLocale(categoryItems, locale) {
     const navbarItems = [];
 
-    function addItemToNavBar(item, locale) {
+    function addItemToNavBar(item) {
       const { title, pages, name } = item;
       const initialPage = pages?.[0]?.name || '';
-      const localePath = getLocalePath(locale);
+      const rootPath = getRootPath();
       navbarItems.push({
-        to: `${localePath}/${name}/${initialPage}`,
+        to: `${rootPath}/${name}/${initialPage}`,
         label: title,
-        path: `${localePath}/${name}`,
+        path: `${rootPath}/${name}`,
       });
     }
 
@@ -178,7 +171,7 @@ function resolveNavbarFromCategories() {
         : categoryItems;
 
     categoryList.forEach((item) => {
-      addItemToNavBar(item, locale);
+      addItemToNavBar(item);
     });
 
     const fileName = getLocaleFileName('navbar', locale);
@@ -189,8 +182,6 @@ function resolveNavbarFromCategories() {
     );
   }
   createNavbarDataForLocale(categoryItems);
-  createNavbarDataForLocale(koCategoryItems, 'ko');
-  createNavbarDataForLocale(jaCategoryItems, 'ja');
 }
 
 function deepCopy(obj) {
