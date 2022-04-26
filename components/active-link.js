@@ -15,16 +15,15 @@ export default function ActiveLink({ children, href, path, type }) {
   })();
   const styles = {
     common: {
-      marginRight: 10,
+      marginRight: '1rem',
       textDecoration: 'none',
+      cursor: 'pointer',
     },
     normal: {
-      color: isActive && 'red',
-      cursor: 'pointer',
+      color: isActive ? 'red' : '#82888f',
     },
     hover: {
       color: 'hsl(206deg 81% 50%)',
-      cursor: 'pointer',
     },
   };
 

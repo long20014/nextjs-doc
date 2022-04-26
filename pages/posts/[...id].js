@@ -5,7 +5,19 @@ import Head from 'next/head';
 import utilStyles from '../../styles/utils.module.css';
 import PostNav from '../../components/post-nav';
 import PostNavData from '../../built-data/post-nav-data.json';
-const { postNavItems } = PostNavData;
+import PostNavDataKo from '../../built-data/post-nav-data-ko.json';
+import PostNavDataJa from '../../built-data/post-nav-data-ja.json';
+
+const getPostNavItems = (locale) => {
+  let postNavItems = PostNavData.postNavItems;
+  if (locale === 'ko') {
+    postNavItems = PostNavDataKo.postNavItems;
+  }
+  if (locale === 'ja') {
+    postNavItems = PostNavDataJa.postNavItems;
+  }
+  return postNavItems;
+};
 
 export default function Post({ postData, postNavItem }) {
   return (
@@ -32,9 +44,10 @@ export async function getStaticPaths() {
   };
 }
 
-export async function getStaticProps({ params }) {
-  const postData = await getPostData(params.id);
+export async function getStaticProps({ params, locale }) {
+  const postData = await getPostData(params.id, locale);
   const path = `/posts/${params.id.join('/')}`;
+  const postNavItems = getPostNavItems(locale);
   const sideBarData = postNavItems.find((item) => {
     return path.includes(item.to);
   });

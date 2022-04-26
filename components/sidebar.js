@@ -1,26 +1,43 @@
-import { useState } from 'react';
-import SidebarData from '../built-data/sidebar-tree.json';
 import NodeTree from './node-tree';
 import { useRouter } from 'next/router';
 import { toCapitalize } from '../utils/format';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import SidebarDataEn from '../built-data/sidebar-tree.json';
+import SidebarDataKo from '../built-data/sidebar-tree-ko.json';
+import SidebarDataJa from '../built-data/sidebar-tree-ja.json';
+
+const getSidebarItems = (locale) => {
+  let sidebarItems = SidebarDataEn.sidebarItems;
+  if (locale === 'ko') {
+    sidebarItems = SidebarDataKo.sidebarItems;
+  }
+  if (locale === 'ja') {
+    sidebarItems = SidebarDataJa.sidebarItems;
+  }
+  return sidebarItems;
+};
 
 export default function Sidebar() {
-  const [hide, setHide] = useState(false);
   const router = useRouter();
-  const sidebarItems = SidebarData.sidebarItems;
-  const sidebarPart = (() => {
+  const [hide, setHide] = useState(false);
+  const [sidebarItems, setSidebarItems] = useState(
+    getSidebarItems(router.locale)
+  );
+
+  useEffect(() => {
+    setSidebarItems(getSidebarItems(router.locale));
+  }, [router.locale]);
+
+  const sidebarPart = (function getSidebarPart() {
     const pathParts = router.asPath.split('/');
-    if (pathParts[2]) {
-      const categorySideBar = pathParts[2];
+    const postIndex = pathParts.indexOf('posts');
+    if (postIndex !== -1) {
+      let categorySideBar = pathParts[postIndex + 1];
       return categorySideBar;
     } else {
       throw new Error('category not found');
     }
   })();
-  const getSidebarName = () => {
-    return `${toCapitalize(sidebarPart)} Sidebar`;
-  };
   const getSidebar = () => {
     return sidebarItems[`${toCapitalize(sidebarPart)}Sidebar`][0];
   };
@@ -30,9 +47,8 @@ export default function Sidebar() {
 
   const renderExpandSidebar = () => {
     return (
-      <div className="sidebar" id="sidebar">
-        <div className="expand tree-section">
-          {getSidebarName()}
+      <div id="sidebar">
+        <div className="tree-section">
           <NodeTree items={items} />
         </div>
         <button
@@ -48,13 +64,13 @@ export default function Sidebar() {
 
   const renderHiddenSidebar = () => {
     return (
-      <div className="hidden-sidebar" id="sidebar" onClick={toggleHideSidebar}>
+      <div id="hidden-sidebar" onClick={toggleHideSidebar}>
         {'>>'}
       </div>
     );
   };
 
   const sidebar = getSidebar();
-  const items = sidebar.items;
+  const items = [sidebar];
   return !hide ? renderExpandSidebar() : renderHiddenSidebar();
 }

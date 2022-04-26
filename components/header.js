@@ -1,12 +1,12 @@
 import React from 'react';
-import Link from 'next/link';
-import navbarData from '../built-data/navbar.json';
+import navbarDataEn from '../built-data/navbar.json';
 import headerData from '../fetched-data/navbar-data.json';
 import ActiveLink from './active-link';
 import constants from '../utils/constants';
 import NormalLink from './normal-link';
+import LanguageSelector from './language-selector';
+
 const { NAVBAR } = constants;
-const { navbarItems } = navbarData;
 const { config: navbarConfig } = headerData;
 
 const linkStyles = {
@@ -29,27 +29,33 @@ function Title({ title }) {
 }
 
 export default function Header() {
+  let navbarItems = navbarDataEn.navbarItems;
+
   return (
     <div id="header">
-      <div style={{ marginRight: '90px', paddingLeft: '1em' }}>
+      <div className="logo-section">
         <NormalLink href="/" style={linkStyles}>
           <Logo src={navbarConfig.logo.src} />
           <Title title={navbarConfig.title} />
         </NormalLink>
       </div>
-
-      {navbarItems.map((item) => {
-        return (
-          <ActiveLink
-            key={item.to}
-            href={item.to}
-            path={item.path}
-            type={NAVBAR}
-          >
-            {item.label}
-          </ActiveLink>
-        );
-      })}
+      <div className="nav-section">
+        {navbarItems.map((item) => {
+          return (
+            <ActiveLink
+              key={item.to}
+              href={item.to}
+              path={item.path}
+              type={NAVBAR}
+            >
+              {item.label}
+            </ActiveLink>
+          );
+        })}
+      </div>
+      <div className="right-section">
+        <LanguageSelector></LanguageSelector>
+      </div>
     </div>
   );
 }
