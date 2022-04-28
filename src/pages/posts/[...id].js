@@ -1,12 +1,12 @@
 import React from 'react';
-import Layout from '../../components/layout';
-import { getAllPostIds, getPostData } from '../../lib/posts';
+import Layout from 'src/components/layout';
+import { getAllPostIds, getPostData } from 'src/lib/posts';
 import Head from 'next/head';
-import utilStyles from '../../styles/utils.module.css';
-import PostNav from '../../components/post-nav';
-import PostNavData from '../../../built-data/post-nav-data.json';
-import PostNavDataKo from '../../../built-data/post-nav-data-ko.json';
-import PostNavDataJa from '../../../built-data/post-nav-data-ja.json';
+import utilStyles from 'src/styles/utils.module.css';
+import PostNav from 'src/components/post-nav';
+import PostNavData from 'built-data/post-nav-data.json';
+import PostNavDataKo from 'built-data/post-nav-data-ko.json';
+import PostNavDataJa from 'built-data/post-nav-data-ja.json';
 
 const getPostNavItems = (locale) => {
   let postNavItems = PostNavData.postNavItems;

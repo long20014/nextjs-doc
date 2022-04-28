@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import ActiveLink from './active-link';
 import { useRouter } from 'next/router';
-import constants from '../utils/constants';
-import useHover from '../hooks/useHover';
+import constants from 'src/utils/constants';
+import useHover from 'src/hooks/useHover';
 import classNames from 'classnames';
 
 const { SIDEBAR_LINK } = constants;
