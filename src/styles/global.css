@@ -3,7 +3,10 @@
   --sidebar-width: 300px;
   --header-height: 3rem;
   --light-gray: #c3c3c3;
+  --light-gray-bg: #fcfcfd;
   --light-gray-text: #82888f;
+  --green-primary: #2e8555;
+  --hidden-sidebar-width: 30px;
 }
 
 html,
@@ -54,12 +57,13 @@ img {
   flex-flow: row wrap;
   overflow-y: scroll;
   position: relative;
+  min-height: 100%;
 }
 .outer-container {
   display: flex;
   width: 100%;
   flex-flow: row wrap;
-  position: relative;
+  flex: 1 0 auto;
 }
 
 .post-container {
@@ -76,88 +80,112 @@ img {
   width: 100%;
 }
 
-#sidebar {
+.sidebar-container {
   width: var(--sidebar-width);
+  transition: width 0.3s ease;
+  will-change: width;
+  margin-top: calc(var(--header-height)*-1);
   border-right: 1px solid var(--light-gray);
+  clip-path: inset(0);
+  background-color: var(--light-gray-bg);
+}
+
+.sidebar-container-hidden {
+  width: calc(var(--hidden-sidebar-width));
+}
+
+.sidebar {
+  width: calc(var(--sidebar-width)); 
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: #fcfcfd;
-  height: calc(100vh - var(--header-height)); 
+  max-height: 100vh;
+  height: 100%;
   position: sticky;
-  top: var(--header-height);
-  z-index: 10;
-  word-break: break-all;
+  top: 0;
   overflow-y: auto;
   color: var(--light-gray-text);
+  word-wrap: break-word;
+  transition: opacity 50ms;
+  padding-top: var(--header-height);
 }
 
-#hidden-sidebar {
-  height: calc(100vh - var(--header-height));
+.sidebar-hidden {
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+  visibility: hidden;
+}
+
+.sidebar li {
+  list-style:none;
+}
+
+.sidebar a {
+  text-decoration: none;
+}
+
+.sidebar ul:first-child {
+  margin-top: 0;
+}
+
+.sidebar ul:first-child {
+  padding-inline-start: 0;
+}
+
+.sidebar ul:not(:first-child) {
+  padding-inline-start: 1.5em;
+}
+
+.sidebar .button {
+  background-color: transparent;
+  cursor: pointer;
+  border-top: 1px solid var(--light-gray);
   border-right: 1px solid var(--light-gray);
-  width: 30px;
+  border-left: 0px;
+  border-bottom: 0px;
+  transition: all 0.3s ease;
+  padding: 10px;
+  font-size: 1rem;
+}
+
+.sidebar .button:hover {
+  background-color: #eee;
+}
+
+.sidebar ul {
+  display: none;
+}
+
+.sidebar .expand > ul {
+  display: block 
+}
+
+.sidebar .tree-section {
+  padding: 1em;
+}
+
+.hidden-sidebar {
+  max-height: 100vh;
+  height: 100%;
+  width: calc(var(--hidden-sidebar-width) - 1px); 
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  background-color: #fcfcfd;
   position: sticky;
   top: var(--header-height);
+  font-size: 1rem;
   z-index: 10;
+  transition: background-color 0.3s ease;
 }
 
-#sidebar li {
-  list-style:none;
-}
-
-#sidebar a {
-  text-decoration: none;
-}
-
-#sidebar ul:first-child {
-  margin-top: 0;
-}
-
-#sidebar ul:first-child {
-  padding-inline-start: 0;
-}
-
-#sidebar ul:not(:first-child) {
-  padding-inline-start: 1.5em;
-}
-
-#sidebar .button {
-  background-color: #fcfcfd;
-  cursor: pointer;
-  border-top: 1px solid var(--light-gray);
-  border-right: 0px;
-  border-left: 0px;
-  border-bottom: 0px;
-}
-
-#sidebar .button:hover {
-  background-color: #eee;
-}
-
-#hidden-sidebar:hover {
+.hidden-sidebar:hover {
   background-color: #eee;
 } 
 
-#sidebar ul {
-  display: none;
-}
-
-#sidebar .expand > ul {
-  display: block 
-}
-
-#sidebar .tree-section {
-  padding: 1em;
-}
-
 .table-of-content-container {
   width: var(--sidebar-width);
-  /* border-left: 1px solid black; */
   font-size: 12px;
   position: relative;
   background-color: white;
@@ -190,10 +218,6 @@ img {
   color: hsla(34, 83%, 49%, 0.493);
 }
 
-#sidebar #sidebar-item:hover {
-  color: rgba(12, 88, 94, 0.5);
-}
-
 .page-content {
   padding: 1em;
   flex: 1;
@@ -205,7 +229,6 @@ img {
   width: 100%;
   margin-bottom: 2rem;
 }
-
 
 .header {
   display: flex;
@@ -239,3 +262,31 @@ img {
 #header .logo-section {
   margin-right: 90px;
 }
+
+.post-nav .post-nav-button {
+  background: white;
+  padding: 1rem;
+  border: 1px solid var(--light-gray);
+  border-radius: 5px;
+  font-style: bold;
+  color: var(--green-primary);
+  cursor: pointer;
+  width: 300px;
+  transition: border 0.3s ease;
+}
+
+.text-align-right {
+  text-align: right;
+}
+
+.text-align-left {
+  text-align: left;
+}
+
+.post-nav .post-nav-button:hover {
+  border: 1px solid var(--green-primary);
+}
+
+.active-link {
+  transition: color 0.3s ease;
+} 

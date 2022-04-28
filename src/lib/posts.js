@@ -3,7 +3,7 @@ import path from 'path';
 import matter from 'gray-matter';
 import { remark } from 'remark';
 import html from 'remark-html';
-import { POSTS_ROOT_DIR, DEFAULT_LOCALE } from '../tools/constants';
+import { POSTS_ROOT_DIR, DEFAULT_LOCALE } from '../../tools/constants';
 
 const postsDirectory = POSTS_ROOT_DIR;
 

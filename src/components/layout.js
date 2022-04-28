@@ -7,9 +7,15 @@ import TableOfContent from './table-of-content';
 
 export const siteTitle = 'Next.js Sample Website';
 
+const containerStyle = {
+  minHeight: '100vh',
+  display: 'flex',
+  flexDirection: 'column',
+};
+
 export default function Layout({ children, home }) {
   return (
-    <div id="container">
+    <div id="container" style={containerStyle}>
       <Head>
         <link rel="icon" href="/favicon.ico" />
         <meta

@@ -9,15 +9,15 @@ export default function PostNav({ postNavItem }) {
           style={{ marginRight: 'auto' }}
           href={postNavItem.previous.link}
         >
-          <button>
-            {'< '} {postNavItem.previous.label}
+          <button className="post-nav-button text-align-left">
+            {'« '} {postNavItem.previous.label}
           </button>
         </NormalLink>
       )}
       {postNavItem.next && (
         <NormalLink href={postNavItem.next.link} style={{ marginLeft: 'auto' }}>
-          <button>
-            {postNavItem.next.label} {' >'}
+          <button className="post-nav-button text-align-right">
+            {postNavItem.next.label} {' »'}
           </button>
         </NormalLink>
       )}

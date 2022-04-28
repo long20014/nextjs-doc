@@ -4,9 +4,9 @@ import { getAllPostIds, getPostData } from '../../lib/posts';
 import Head from 'next/head';
 import utilStyles from '../../styles/utils.module.css';
 import PostNav from '../../components/post-nav';
-import PostNavData from '../../built-data/post-nav-data.json';
-import PostNavDataKo from '../../built-data/post-nav-data-ko.json';
-import PostNavDataJa from '../../built-data/post-nav-data-ja.json';
+import PostNavData from '../../../built-data/post-nav-data.json';
+import PostNavDataKo from '../../../built-data/post-nav-data-ko.json';
+import PostNavDataJa from '../../../built-data/post-nav-data-ja.json';
 
 const getPostNavItems = (locale) => {
   let postNavItems = PostNavData.postNavItems;

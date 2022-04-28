@@ -40,7 +40,7 @@ export default function ActiveLink({ children, href, path, type }) {
       href={href}
       onClick={handleClick}
       style={{ ...hoverStyle, ...styles.common }}
-      className="light-gray-text"
+      className="light-gray-text active-link"
     >
       {children}
     </a>
