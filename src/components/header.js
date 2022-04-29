@@ -1,8 +1,8 @@
 import React from 'react';
-import navbarDataEn from '../built-data/navbar.json';
-import headerData from '../fetched-data/navbar-data.json';
+import navbarDataEn from 'built-data/navbar.json';
+import headerData from 'fetched-data/navbar-data.json';
 import ActiveLink from './active-link';
-import constants from '../utils/constants';
+import constants from 'src/utils/constants';
 import NormalLink from './normal-link';
 import LanguageSelector from './language-selector';
 

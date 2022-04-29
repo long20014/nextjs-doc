@@ -1,10 +1,11 @@
-import NodeTree from './node-tree';
+import NodeTree from 'src/components/node-tree';
 import { useRouter } from 'next/router';
-import { toCapitalize } from '../utils/format';
+import { toCapitalize } from 'src/utils/format';
 import React, { useState, useEffect } from 'react';
-import SidebarDataEn from '../built-data/sidebar-tree.json';
-import SidebarDataKo from '../built-data/sidebar-tree-ko.json';
-import SidebarDataJa from '../built-data/sidebar-tree-ja.json';
+import SidebarDataEn from 'built-data/sidebar-tree.json';
+import SidebarDataKo from 'built-data/sidebar-tree-ko.json';
+import SidebarDataJa from 'built-data/sidebar-tree-ja.json';
+import classNames from 'classnames';
 
 const getSidebarItems = (locale) => {
   let sidebarItems = SidebarDataEn.sidebarItems;
@@ -45,9 +46,9 @@ export default function Sidebar() {
     setHide((hide) => !hide);
   };
 
-  const renderExpandSidebar = () => {
+  const renderExpandSidebar = (hide) => {
     return (
-      <div id="sidebar">
+      <div className={classNames('sidebar', { 'sidebar-hidden': hide })}>
         <div className="tree-section">
           <NodeTree items={items} />
         </div>
@@ -56,7 +57,7 @@ export default function Sidebar() {
           className="button"
           onClick={toggleHideSidebar}
         >
-          {'<<'}
+          {'«'}
         </button>
       </div>
     );
@@ -64,13 +65,22 @@ export default function Sidebar() {
 
   const renderHiddenSidebar = () => {
     return (
-      <div id="hidden-sidebar" onClick={toggleHideSidebar}>
-        {'>>'}
+      <div className="hidden-sidebar" onClick={toggleHideSidebar}>
+        {'»'}
       </div>
     );
   };
 
   const sidebar = getSidebar();
   const items = [sidebar];
-  return !hide ? renderExpandSidebar() : renderHiddenSidebar();
+  return (
+    <aside
+      className={classNames('sidebar-container', {
+        'sidebar-container-hidden': hide,
+      })}
+    >
+      {renderExpandSidebar(hide)}
+      {hide && renderHiddenSidebar()}
+    </aside>
+  );
 }
