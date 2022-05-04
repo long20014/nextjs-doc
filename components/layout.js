@@ -6,22 +6,15 @@ import React, { useState, useEffect } from 'react';
 import TableOfContent from './table-of-content';
 import { LangStateProvider } from '../contexts/language/index';
 import { useLangContext } from '../contexts/language/index';
-import { useRouter } from 'next/router';
-
 export const siteTitle = 'Next.js Sample Website';
 
 function InnerLayout({ children, home }) {
-  const { state } = useLangContext();
-  const router = useRouter();
-  const [lang, setLang] = useState('en');
-  useEffect(() => {
-    const lang = localStorage.getItem('lang');
-    setLang(lang);
-  }, [router.asPath]);
+  // const { state } = useLangContext();
+
   return (
     <div id="container">
       <Head>
-        <html lang={lang}></html>
+        {/* <html lang={state.lang}></html> */}
         <link rel="icon" href="/favicon.ico" />
         <meta
           name="description"

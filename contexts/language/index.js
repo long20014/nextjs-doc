@@ -1,6 +1,8 @@
 import React, { useContext, useReducer } from 'react';
 import { LanguageContext } from './context';
 import LangReducer from './reducer';
+import { useRouter } from 'next/router';
+import { resolveLangPath } from '../../utils/resolve';
 
 export const useLangContext = () => {
   const { state, dispatch } = useContext(LanguageContext);
@@ -9,11 +11,13 @@ export const useLangContext = () => {
 };
 
 export const LangStateProvider = ({ children }) => {
+  const router = useRouter();
+  const lang =
+    resolveLangPath(router.asPath) ||
+    (typeof localStorage !== 'undefined' && localStorage.getItem('lang')) ||
+    'en';
   const initialState = {
-    lang:
-      typeof localStorage !== 'undefined'
-        ? localStorage.getItem('lang') || 'en'
-        : 'en',
+    lang,
   };
 
   const [state, dispatch] = useReducer(LangReducer, initialState);

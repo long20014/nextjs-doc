@@ -27,7 +27,11 @@ export default function languageSelector() {
     const docPath = pathnameParts.slice(3).join('/');
     changeLang(dispatch, lang);
     console.log(`doc path: ${pathname} ${asPath}`);
-    router.push(`/posts/${lang}/${docPath}`);
+    if (pathname !== '/posts/[...id]') {
+      router.push({ pathname, query }, { pathname, query: `lang=${lang}` });
+    } else {
+      router.push(`/posts/${lang}/${docPath}`);
+    }
   };
 
   return (

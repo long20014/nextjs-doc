@@ -9,6 +9,8 @@ import constants from '../utils/constants';
 import NormalLink from './normal-link';
 import LanguageSelector from './language-selector';
 import { useLangContext } from '../contexts/language/index';
+import { useRouter } from 'next/router';
+import { resolveLangPath } from '../utils/resolve';
 
 const { NAVBAR } = constants;
 const { config: navbarConfig } = headerData;
@@ -44,8 +46,15 @@ function Title({ title }) {
 }
 
 export default function Header() {
+  const router = useRouter();
   const { state } = useLangContext();
   const [navbarItems, setNavbarItems] = useState(getNavbarItems(state.lang));
+
+  useEffect(() => {
+    const lang = resolveLangPath(router.asPath);
+    console.log('header lang: ' + router.asPath);
+    localStorage.setItem('lang', lang);
+  }, [router.asPath]);
 
   useEffect(() => {
     setNavbarItems(getNavbarItems(state.lang));
@@ -54,7 +63,7 @@ export default function Header() {
   return (
     <div id="header">
       <div style={{ marginRight: '90px', paddingLeft: '1em' }}>
-        <NormalLink href="/" style={linkStyles}>
+        <NormalLink href={`/?lang=${state.lang}`} style={linkStyles}>
           <Logo src={navbarConfig.logo.src} />
           <Title title={navbarConfig.title} />
         </NormalLink>
