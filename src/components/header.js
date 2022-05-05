@@ -1,13 +1,29 @@
-import React from 'react';
-import navbarDataEn from 'built-data/navbar.json';
+import React, { useEffect, useState } from 'react';
+import navbarDataEn from 'built-data/navbar-en.json';
+import navbarDataJa from 'built-data/navbar-ja.json';
+import navbarDataKo from 'built-data/navbar-ko.json';
 import headerData from 'fetched-data/navbar-data.json';
 import ActiveLink from './active-link';
 import constants from 'src/utils/constants';
 import NormalLink from './normal-link';
 import LanguageSelector from './language-selector';
+import { useLangContext } from 'src/contexts/language';
+import { useRouter } from 'next/router';
+import { resolveLangPath } from 'src/utils/resolve';
 
 const { NAVBAR } = constants;
 const { config: navbarConfig } = headerData;
+
+const getNavbarItems = (locale) => {
+  let navbarItems = navbarDataEn.navbarItems;
+  if (locale === 'ko') {
+    navbarItems = navbarDataKo.navbarItems;
+  }
+  if (locale === 'ja') {
+    navbarItems = navbarDataJa.navbarItems;
+  }
+  return navbarItems;
+};
 
 const linkStyles = {
   display: 'flex',
@@ -29,12 +45,24 @@ function Title({ title }) {
 }
 
 export default function Header() {
-  let navbarItems = navbarDataEn.navbarItems;
+  const router = useRouter();
+  const { state } = useLangContext();
+  const [navbarItems, setNavbarItems] = useState(getNavbarItems(state.lang));
+
+  useEffect(() => {
+    const lang = resolveLangPath(router.asPath);
+    console.log('header lang: ' + router.asPath);
+    localStorage.setItem('lang', lang);
+  }, [router.asPath]);
+
+  useEffect(() => {
+    setNavbarItems(getNavbarItems(state.lang));
+  }, [state.lang]);
 
   return (
     <div id="header">
       <div className="logo-section">
-        <NormalLink href="/" style={linkStyles}>
+        <NormalLink href={`/?lang=${state.lang}`} style={linkStyles}>
           <Logo src={navbarConfig.logo.src} />
           <Title title={navbarConfig.title} />
         </NormalLink>

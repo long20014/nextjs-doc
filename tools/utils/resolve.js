@@ -7,20 +7,16 @@ const data = {
   pageItemsJa: null,
 };
 
-const getRootPath = () => {
-  return '/posts';
+const getLocalePath = (locale) => {
+  return locale ? `/posts/${locale}` : '/posts';
+  // return '/posts';
 };
 
 const getLocaleFileName = (fileName, locale) => {
   return locale ? `${fileName}-${locale}` : fileName;
 };
 
-const {
-  POSTS_ROOT_DIR,
-  JA_LOCALE_DIR,
-  KO_LOCALE_DIR,
-  DEFAULT_LOCALE,
-} = require('../constants');
+const { EN_LOCALE_DIR, JA_LOCALE_DIR, KO_LOCALE_DIR } = require('../constants');
 const { FETCHED_DATA_DIR, BUILT_DATA_DIR } = require('../constants');
 
 const { sortItems } = require('./sort');
@@ -68,54 +64,52 @@ const {
 } = require('./format');
 
 function resolveSidebar() {
-  function createDropdowns(item) {
+  function createDropdowns(item, locale) {
     const pageTitles = item.pages
-      ? item.pages.map((page) => createPage(page))
+      ? item.pages.map((page) => createPage(page, locale))
       : [];
     const childDropdowns =
       item.dropdowns &&
-      item.dropdowns.map((dropdown) => createDropdowns(dropdown));
+      item.dropdowns.map((dropdown) => createDropdowns(dropdown, locale));
     const items = childDropdowns
       ? pageTitles.concat(childDropdowns)
       : pageTitles;
-    const rootPath = getRootPath();
+    const localePath = getLocalePath(locale);
     const dropdown = {
       label: item.title,
       items: items,
-      path: `${rootPath}/${item.path}`,
+      path: `${localePath}/${item.path}`,
       name: item.name,
-      isExpanded: false,
     };
     return dropdown;
   }
 
-  function createPage(page) {
-    const rootPath = getRootPath();
+  function createPage(page, locale) {
+    const localePath = getLocalePath(locale);
     return {
-      to: `${rootPath}/${page.path}/${page.name}`,
+      to: `${localePath}/${page.path}/${page.name}`,
       label: page.title,
-      path: `${rootPath}/${page.path}`,
+      path: `${localePath}/${page.path}`,
     };
   }
 
-  function addItemToSideBar(sidebarItems, item) {
+  function addItemToSideBar(sidebarItems, item, locale) {
     const { title, pages, dropdowns, name } = item;
     const categoryTitle = title;
-    const pageTitles = pages.map((page) => createPage(page));
+    const pageTitles = pages.map((page) => createPage(page, locale));
     const childDropdowns = dropdowns.map((dropdown) =>
-      createDropdowns(dropdown)
+      createDropdowns(dropdown, locale)
     );
-    const rootPath = getRootPath();
+    const localePath = getLocalePath(locale);
 
     sidebarItems[`${categoryTitle}Sidebar`] = [
       {
         type: 'category',
         label: categoryTitle,
-        path: rootPath,
         name: name,
-        to: `${rootPath}/${name}`,
-        isExpanded: true,
+        to: `${localePath}/${name}`,
         items: pageTitles.concat(childDropdowns),
+        isExpanded: true,
       },
     ];
   }
@@ -137,7 +131,7 @@ function resolveSidebar() {
         : categoryItems;
 
     categoryList.forEach((item) => {
-      addItemToSideBar(sidebarItems, item);
+      addItemToSideBar(sidebarItems, item, locale);
     });
     const fileName = getLocaleFileName('sidebar-tree', locale);
 
@@ -146,25 +140,31 @@ function resolveSidebar() {
       JSON.stringify({ sidebarItems })
     );
   }
-  buildSidebarTree(categoryItems);
+  buildSidebarTree(categoryItems, 'en');
   buildSidebarTree(koCategoryItems, 'ko');
   buildSidebarTree(jaCategoryItems, 'ja');
 }
 
 function resolveNavbarFromCategories() {
   const { categoryItems } = require('../../built-data/data-tree.json');
+  const {
+    categoryItems: koCategoryItems,
+  } = require('../../built-data/data-tree-ko.json');
+  const {
+    categoryItems: jaCategoryItems,
+  } = require('../../built-data/data-tree-ja.json');
 
   function createNavbarDataForLocale(categoryItems, locale) {
     const navbarItems = [];
 
-    function addItemToNavBar(item) {
+    function addItemToNavBar(item, locale) {
       const { title, pages, name } = item;
       const initialPage = pages?.[0]?.name || '';
-      const rootPath = getRootPath();
+      const localePath = getLocalePath(locale);
       navbarItems.push({
-        to: `${rootPath}/${name}/${initialPage}`,
+        to: `${localePath}/${name}/${initialPage}`,
         label: title,
-        path: `${rootPath}/${name}`,
+        path: `${localePath}/${name}`,
       });
     }
 
@@ -174,7 +174,7 @@ function resolveNavbarFromCategories() {
         : categoryItems;
 
     categoryList.forEach((item) => {
-      addItemToNavBar(item);
+      addItemToNavBar(item, locale);
     });
 
     const fileName = getLocaleFileName('navbar', locale);
@@ -184,7 +184,9 @@ function resolveNavbarFromCategories() {
       JSON.stringify({ navbarItems })
     );
   }
-  createNavbarDataForLocale(categoryItems);
+  createNavbarDataForLocale(categoryItems, 'en');
+  createNavbarDataForLocale(koCategoryItems, 'ko');
+  createNavbarDataForLocale(jaCategoryItems, 'ja');
 }
 
 function deepCopy(obj) {
@@ -192,7 +194,7 @@ function deepCopy(obj) {
 }
 
 function createPostNavData() {
-  const { sidebarItems } = require('../../built-data/sidebar-tree.json');
+  const { sidebarItems } = require('../../built-data/sidebar-tree-en.json');
   const {
     sidebarItems: koSidebarItems,
   } = require('../../built-data/sidebar-tree-ko.json');
@@ -243,7 +245,7 @@ function createPostNavData() {
     );
   }
 
-  createPostNavDataLocale(sidebarItems);
+  createPostNavDataLocale(sidebarItems, 'en');
   createPostNavDataLocale(koSidebarItems, 'ko');
   createPostNavDataLocale(jaSidebarItems, 'ja');
 }
@@ -371,23 +373,32 @@ function createDataTrees() {
 }
 
 function createDocFiles() {
-  function createFilesFromCategoryData(rootDir, item, locale) {
+  function createFilesFromCategoryData(rootDir, item, index) {
     const { title, pages, dropdowns, name } = item;
 
     let categoryDir = `${rootDir}/${name}`;
 
-    // if (fs.existsSync(categoryDir)) {
-    //   fs.rmSync(categoryDir, { recursive: true, force: true });
-    // }
+    if (fs.existsSync(categoryDir)) {
+      fs.rmSync(categoryDir, { recursive: true, force: true });
+    }
     fs.mkdirSync(categoryDir, { recursive: true });
+
+    // const categoryJsonConfig = {
+    //   label: title,
+    //   position: index + 1,
+    // };
+    // fs.writeFileSync(
+    //   `${categoryDir}/_category_.json`,
+    //   JSON.stringify(categoryJsonConfig)
+    // );
 
     function createDropdowns(dropdowns) {
       dropdowns.forEach((dropdown) => {
         const { path, pages, dropdowns, name } = dropdown;
         const dir = `${rootDir}/${path}/${name}`;
-        // if (fs.existsSync(dir)) {
-        //   fs.rmSync(dir, { recursive: true, force: true });
-        // }
+        if (fs.existsSync(dir)) {
+          fs.rmSync(dir, { recursive: true, force: true });
+        }
         fs.mkdirSync(dir, { recursive: true });
         if (pages) createPageFiles(pages);
         if (dropdowns) createDropdowns(dropdowns);
@@ -427,11 +438,8 @@ function createDocFiles() {
           updatedAt,
           pageContent
         );
-        const fileName =
-          locale === DEFAULT_LOCALE ? `index` : `index.${locale}`;
-        const dir = `${rootDir}/${path}/${name}`;
-        fs.mkdirSync(dir, { recursive: true });
-        fs.writeFileSync(`${dir}/${fileName}.md`, markdownContent);
+
+        fs.writeFileSync(`${rootDir}/${path}/${name}.md`, markdownContent);
       });
     }
 
@@ -449,19 +457,16 @@ function createDocFiles() {
       categoryItems: koCategoryItems,
     } = require('../../built-data/data-tree-ko.json');
 
-    if (fs.existsSync(POSTS_ROOT_DIR)) {
-      fs.rmSync(POSTS_ROOT_DIR, { recursive: true, force: true });
-    }
-    categoryItems.forEach((item) => {
-      createFilesFromCategoryData(POSTS_ROOT_DIR, item, DEFAULT_LOCALE);
+    categoryItems.forEach((i, index) => {
+      createFilesFromCategoryData(EN_LOCALE_DIR, i, index);
     });
 
-    jaCategoryItems.forEach((item) => {
-      createFilesFromCategoryData(POSTS_ROOT_DIR, item, 'ja');
+    jaCategoryItems.forEach((i, index) => {
+      createFilesFromCategoryData(JA_LOCALE_DIR, i, index);
     });
 
-    koCategoryItems.forEach((item) => {
-      createFilesFromCategoryData(POSTS_ROOT_DIR, item, 'ko');
+    koCategoryItems.forEach((i, index) => {
+      createFilesFromCategoryData(KO_LOCALE_DIR, i, index);
     });
 
     console.log('✅ Doc files are created successfully');

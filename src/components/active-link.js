@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import constants from '../utils/constants';
+import constants from 'src/utils/constants';
 import React from 'react';
 import useHover from '../hooks/useHover';
 const { NAVBAR } = constants;

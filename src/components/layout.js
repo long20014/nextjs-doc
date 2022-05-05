@@ -4,6 +4,7 @@ import Header from './header';
 import Footer from './footer';
 import React from 'react';
 import TableOfContent from './table-of-content';
+import { LangStateProvider } from 'src/contexts/language';
 
 export const siteTitle = 'Next.js Sample Website';
 
@@ -13,7 +14,7 @@ const containerStyle = {
   flexDirection: 'column',
 };
 
-export default function Layout({ children, home }) {
+function InnerLayout({ children, home }) {
   return (
     <div id="container" style={containerStyle}>
       <Head>
@@ -42,5 +43,13 @@ export default function Layout({ children, home }) {
       </div>
       <Footer />
     </div>
+  );
+}
+
+export default function Layout({ children, home }) {
+  return (
+    <LangStateProvider>
+      <InnerLayout home={home}>{children}</InnerLayout>
+    </LangStateProvider>
   );
 }
