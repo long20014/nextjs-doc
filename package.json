@@ -6,7 +6,6 @@
     "export": "next export",
     "start": "next start -p 3002",
     "lint": "next lint",
-    "export": "next export",
     "docusaurus": "docusaurus",
     "prepare-docs": "node tools/prepare-docusaurus.js",
     "build-data-tree": "node tools/build-data-tree.js",

@@ -25,6 +25,7 @@ const { sortItems } = require('./sort');
   if (fs.existsSync(`${FETCHED_DATA_DIR}/category-data.json`)) {
     const { items } = require('../../fetched-data/category-data.json');
     data.categoryItems = items;
+    console.log('category items: ' + items);
   }
   if (fs.existsSync(`${FETCHED_DATA_DIR}/dropdown-data.json`)) {
     const { items } = require('../../fetched-data/dropdown-data.json');
