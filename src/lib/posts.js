@@ -52,9 +52,10 @@ export function getAllPostIds() {
     fileNames.forEach((fileName) => {
       const fullPath = path.join(rootDir, fileName);
       if (!fs.lstatSync(fullPath).isDirectory()) {
-        const id = `${rootDir}/${fileName.replace(/\.md$/, '')}`
-          .substr(6)
-          .split('/');
+        // const id = `${rootDir}/${fileName.replace(/\.md$/, '')}`
+        //   .substr(6)
+        //   .split('/');
+        const id = rootDir.split('/').slice(1);
         postIds.push(id);
       } else {
         getAllFileNames(fullPath);
@@ -74,7 +75,7 @@ export function getAllPostIds() {
 }
 
 export async function getPostData(id) {
-  const fullPath = path.join(postsDirectory, `${id.join('/')}.md`);
+  const fullPath = path.join(postsDirectory, `${id.join('/')}/index.md`);
   const fileContents = fs.readFileSync(fullPath, 'utf8');
 
   // Use gray-matter to parse the post metadata section

@@ -438,8 +438,12 @@ function createDocFiles() {
           updatedAt,
           pageContent
         );
-
-        fs.writeFileSync(`${rootDir}/${path}/${name}.md`, markdownContent);
+        const dir = `${rootDir}/${path}/${name}`;
+        if (fs.existsSync(dir)) {
+          fs.rmSync(dir, { recursive: true, force: true });
+        }
+        fs.mkdirSync(dir, { recursive: true });
+        fs.writeFileSync(`${dir}/index.md`, markdownContent);
       });
     }
 
