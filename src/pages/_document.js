@@ -1,10 +1,11 @@
 import React from 'react';
 import { Html, Head, Main, NextScript } from 'next/document';
 
-function MyDocument({ __NEXT_DATA__ }) {
+function MyDocument(props) {
+  const nextData = props?.__NEXT_DATA__;
   const currentLocale =
-    __NEXT_DATA__.query.lang ||
-    (__NEXT_DATA__.query.id && __NEXT_DATA__.query.id[0]) ||
+    nextData?.query.lang ||
+    (nextData?.query.id && nextData?.query.id[0]) ||
     'en';
   return (
     <Html lang={currentLocale}>
