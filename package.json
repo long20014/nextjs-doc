@@ -2,8 +2,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "export": "next export",
+    "build": "next build && next export",
     "start": "next start -p 3002",
     "lint": "next lint",
     "docusaurus": "docusaurus",

@@ -21,8 +21,8 @@ const getPostNavItems = (locale) => {
 };
 
 export default function Post({ postData }) {
-  const [postNavItem, setPostNavItem] = useState('en');
   const router = useRouter();
+  const [postNavItem, setPostNavItem] = useState(null);
 
   useEffect(() => {
     const lang = localStorage.getItem('lang') || 'en';
@@ -30,7 +30,7 @@ export default function Post({ postData }) {
       return router.asPath.includes(item.to);
     });
     const postNavItem = categoryPostNav.items.find((item) => {
-      return router.asPath === item.current.link;
+      return router.asPath === item.current.link + '/';
     });
     setPostNavItem(postNavItem);
   }, [router.asPath]);

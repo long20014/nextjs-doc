@@ -11,7 +11,7 @@ export default function ActiveLink({ children, href, path, type }) {
     if (type === NAVBAR) {
       return router.asPath.includes(path);
     }
-    return router.asPath === href;
+    return router.asPath === href + '/';
   })();
   const styles = {
     common: {
