@@ -53,6 +53,7 @@ export default function Header() {
     const lang = resolveLangPath(router.asPath);
     console.log('header lang: ' + router.asPath);
     localStorage.setItem('lang', lang);
+    document.documentElement.lang = lang;
   }, [router.asPath]);
 
   useEffect(() => {
