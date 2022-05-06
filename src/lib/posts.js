@@ -5,8 +5,6 @@ import { remark } from 'remark';
 import html from 'remark-html';
 import { POSTS_ROOT_DIR } from 'tools/constants';
 
-// const postsDirectory = path.join(process.cwd(), 'posts');
-
 const postsDirectory = POSTS_ROOT_DIR;
 
 export function getSortedPostsData() {
@@ -32,16 +30,6 @@ export function getSortedPostsData() {
   createPostData(postsDirectory);
 
   return allPostsData;
-
-  // return allPostsData.sort(({ date: a }, { date: b }) => {
-  //   if (a < b) {
-  //     return 1;
-  //   } else if (a > b) {
-  //     return -1;
-  //   } else {
-  //     return 0;
-  //   }
-  // });
 }
 
 export function getAllPostIds() {
@@ -52,9 +40,6 @@ export function getAllPostIds() {
     fileNames.forEach((fileName) => {
       const fullPath = path.join(rootDir, fileName);
       if (!fs.lstatSync(fullPath).isDirectory()) {
-        // const id = `${rootDir}/${fileName.replace(/\.md$/, '')}`
-        //   .substr(6)
-        //   .split('/');
         const id = rootDir.split('/').slice(1);
         postIds.push(id);
       } else {

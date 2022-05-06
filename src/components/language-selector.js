@@ -4,6 +4,7 @@ import useHover from '../hooks/useHover';
 import classNames from 'classnames';
 import { useLangContext } from 'src/contexts/language/';
 import { changeLang } from 'src/contexts/language/action';
+import { resolveLangPath } from 'src/utils/resolve';
 
 export default function languageSelector() {
   const router = useRouter();
@@ -20,6 +21,11 @@ export default function languageSelector() {
   const getLanguageLabel = (lang) => {
     return languageList.find((item) => item.value === lang).label;
   };
+
+  useEffect(() => {
+    const lang = resolveLangPath(router.asPath);
+    changeLanguage(lang);
+  }, [router.asPath]);
 
   const changeLanguage = (language) => {
     const { pathname, asPath, query } = router;
