@@ -3,7 +3,7 @@ export const resolveLangPath = (path) => {
     return path.split('/')[2];
   }
   const lang = path.split('lang=');
-  if (lang !== '/') {
+  if (lang.length > 1) {
     return lang[1].substring(0, 2);
   }
   return null;
