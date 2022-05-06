@@ -29,8 +29,7 @@ export default function languageSelector() {
 
   const changeLanguage = (language) => {
     const { pathname, asPath, query } = router;
-    localStorage.setItem('lang', language);
-    const lang = localStorage.getItem('lang') || 'ko';
+    const lang = language;
     const pathnameParts = window.location.pathname.split('/');
     const docPath = pathnameParts.slice(3).join('/');
     changeLang(dispatch, lang);

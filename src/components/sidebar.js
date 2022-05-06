@@ -7,6 +7,7 @@ import { toCapitalize } from 'src/utils/format';
 import React, { useState, useEffect } from 'react';
 import { useLangContext } from 'src/contexts/language';
 import classNames from 'classnames';
+import { resolveLangPath } from 'src/utils/resolve';
 
 const getSidebarItems = (locale) => {
   let sidebarItems = SidebarDataEn.sidebarItems;
@@ -28,6 +29,11 @@ export default function Sidebar() {
   useEffect(() => {
     setSidebarItems(getSidebarItems(state.lang));
   }, [state.lang]);
+
+  useEffect(() => {
+    const lang = resolveLangPath(router.asPath);
+    setSidebarItems(getSidebarItems(lang));
+  }, [router.asPath]);
 
   const sidebarPart = (() => {
     const pathParts = router.asPath.split('/');

@@ -8,6 +8,7 @@ import PostNavDataEn from 'built-data/post-nav-data-en.json';
 import PostNavDataKo from 'built-data/post-nav-data-ko.json';
 import PostNavDataJa from 'built-data/post-nav-data-ja.json';
 import { useRouter } from 'next/router';
+import { resolveLangPath } from 'src/utils/resolve';
 
 const getPostNavItems = (locale) => {
   let postNavItems = PostNavDataEn.postNavItems;
@@ -25,7 +26,7 @@ export default function Post({ postData }) {
   const [postNavItem, setPostNavItem] = useState(null);
 
   useEffect(() => {
-    const lang = localStorage.getItem('lang') || 'en';
+    const lang = resolveLangPath(router.asPath);
     const categoryPostNav = getPostNavItems(lang).find((item) => {
       return router.asPath.includes(item.to);
     });

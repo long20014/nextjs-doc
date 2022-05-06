@@ -12,10 +12,7 @@ export const useLangContext = () => {
 
 export const LangStateProvider = ({ children }) => {
   const router = useRouter();
-  const lang =
-    resolveLangPath(router.asPath) ||
-    (typeof localStorage !== 'undefined' && localStorage.getItem('lang')) ||
-    'en';
+  const lang = resolveLangPath(router.asPath) || 'en';
   const initialState = {
     lang,
   };
