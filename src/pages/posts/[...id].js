@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from 'src/components/layout';
-import { getAllPostIds, getPostData } from 'src/lib/posts';
+import { getAllPostIds, getPostData } from '../../lib/posts';
 import Head from 'next/head';
 import utilStyles from 'src/styles/utils.module.css';
 import PostNav from 'src/components/post-nav';
-import PostNavData from 'built-data/post-nav-data.json';
+import PostNavDataEn from 'built-data/post-nav-data-en.json';
 import PostNavDataKo from 'built-data/post-nav-data-ko.json';
 import PostNavDataJa from 'built-data/post-nav-data-ja.json';
+import { useRouter } from 'next/router';
+import { resolveLangPath } from 'src/utils/resolve';
 
 const getPostNavItems = (locale) => {
-  let postNavItems = PostNavData.postNavItems;
+  let postNavItems = PostNavDataEn.postNavItems;
   if (locale === 'ko') {
     postNavItems = PostNavDataKo.postNavItems;
   }
@@ -19,7 +21,21 @@ const getPostNavItems = (locale) => {
   return postNavItems;
 };
 
-export default function Post({ postData, postNavItem }) {
+export default function Post({ postData }) {
+  const router = useRouter();
+  const [postNavItem, setPostNavItem] = useState(null);
+
+  useEffect(() => {
+    const lang = resolveLangPath(router.asPath);
+    const categoryPostNav = getPostNavItems(lang).find((item) => {
+      return router.asPath.includes(item.to);
+    });
+    const postNavItem = categoryPostNav.items.find((item) => {
+      return router.asPath === item.current.link + '/';
+    });
+    setPostNavItem(postNavItem);
+  }, [router.asPath]);
+
   return (
     <Layout>
       <div className="page-content">
@@ -44,20 +60,11 @@ export async function getStaticPaths() {
   };
 }
 
-export async function getStaticProps({ params, locale }) {
-  const postData = await getPostData(params.id, locale);
-  const path = `/posts/${params.id.join('/')}`;
-  const postNavItems = getPostNavItems(locale);
-  const sideBarData = postNavItems.find((item) => {
-    return path.includes(item.to);
-  });
-  const postNavItem = sideBarData.items.find((item) => {
-    return path === item.current.link;
-  });
+export async function getStaticProps({ params }) {
+  const postData = await getPostData(params.id);
   return {
     props: {
       postData,
-      postNavItem,
     },
   };
 }

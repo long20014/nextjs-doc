@@ -3,13 +3,12 @@ import path from 'path';
 import matter from 'gray-matter';
 import { remark } from 'remark';
 import html from 'remark-html';
-import { POSTS_ROOT_DIR, DEFAULT_LOCALE } from '../../tools/constants';
+import { POSTS_ROOT_DIR } from 'tools/constants';
 
 const postsDirectory = POSTS_ROOT_DIR;
 
 export function getSortedPostsData() {
   const allPostsData = [];
-
   function createPostData(rootDir) {
     const fileNames = fs.readdirSync(rootDir);
     fileNames.forEach((fileName) => {
@@ -31,62 +30,37 @@ export function getSortedPostsData() {
   createPostData(postsDirectory);
 
   return allPostsData;
-
-  // return allPostsData.sort(({ date: a }, { date: b }) => {
-  //   if (a < b) {
-  //     return 1;
-  //   } else if (a > b) {
-  //     return -1;
-  //   } else {
-  //     return 0;
-  //   }
-  // });
 }
 
 export function getAllPostIds() {
-  const fileItems = [];
+  const postIds = [];
 
-  function createFileItems(rootDir) {
-    if (fs.lstatSync(rootDir).isDirectory()) {
-      const fileNames = fs.readdirSync(rootDir);
-
-      fileNames.forEach((fileName) => {
-        const fullPath = path.join(rootDir, fileName);
-
-        function addToFileItems() {
-          if (!fs.lstatSync(fullPath).isDirectory()) {
-            const localePart = fileName.split('.')[1];
-            const locale = localePart === 'md' ? DEFAULT_LOCALE : localePart;
-            const id = rootDir.split('/').slice(1);
-            fileItems.push({ id, locale });
-          } else {
-            createFileItems(fullPath);
-          }
-        }
-        addToFileItems();
-      });
-    }
+  function getAllFileNames(rootDir) {
+    const fileNames = fs.readdirSync(rootDir);
+    fileNames.forEach((fileName) => {
+      const fullPath = path.join(rootDir, fileName);
+      if (!fs.lstatSync(fullPath).isDirectory()) {
+        const id = rootDir.split('/').slice(1);
+        postIds.push(id);
+      } else {
+        getAllFileNames(fullPath);
+      }
+    });
   }
 
-  createFileItems(postsDirectory);
+  getAllFileNames(postsDirectory);
 
-  return fileItems.map((item) => {
-    const { id, locale } = item;
+  return postIds.map((id) => {
     return {
       params: {
         id,
       },
-      locale,
     };
   });
 }
 
-export async function getPostData(id, locale) {
-  const filePath =
-    locale === DEFAULT_LOCALE
-      ? `${id.join('/')}/index.md`
-      : `${id.join('/')}/index.${locale}.md`;
-  const fullPath = path.join(postsDirectory, filePath);
+export async function getPostData(id) {
+  const fullPath = path.join(postsDirectory, `${id.join('/')}/index.md`);
   const fileContents = fs.readFileSync(fullPath, 'utf8');
 
   // Use gray-matter to parse the post metadata section

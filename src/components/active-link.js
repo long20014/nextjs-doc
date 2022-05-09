@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import constants from '../utils/constants';
+import constants from 'src/utils/constants';
 import React from 'react';
 import useHover from '../hooks/useHover';
 const { NAVBAR } = constants;
@@ -11,7 +11,7 @@ export default function ActiveLink({ children, href, path, type }) {
     if (type === NAVBAR) {
       return router.asPath.includes(path);
     }
-    return router.asPath === href;
+    return router.asPath === href + '/';
   })();
   const styles = {
     common: {
