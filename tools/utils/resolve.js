@@ -9,7 +9,6 @@ const data = {
 
 const getLocalePath = (locale) => {
   return locale ? `/posts/${locale}` : '/posts';
-  // return '/posts';
 };
 
 const getLocaleFileName = (fileName, locale) => {
@@ -373,8 +372,8 @@ function createDataTrees() {
 }
 
 function createDocFiles() {
-  function createFilesFromCategoryData(rootDir, item, index) {
-    const { title, pages, dropdowns, name } = item;
+  function createFilesFromCategoryData(rootDir, item) {
+    const { pages, dropdowns, name } = item;
 
     let categoryDir = `${rootDir}/${name}`;
 
@@ -382,15 +381,6 @@ function createDocFiles() {
       fs.rmSync(categoryDir, { recursive: true, force: true });
     }
     fs.mkdirSync(categoryDir, { recursive: true });
-
-    // const categoryJsonConfig = {
-    //   label: title,
-    //   position: index + 1,
-    // };
-    // fs.writeFileSync(
-    //   `${categoryDir}/_category_.json`,
-    //   JSON.stringify(categoryJsonConfig)
-    // );
 
     function createDropdowns(dropdowns) {
       dropdowns.forEach((dropdown) => {
@@ -461,16 +451,16 @@ function createDocFiles() {
       categoryItems: koCategoryItems,
     } = require('../../built-data/data-tree-ko.json');
 
-    categoryItems.forEach((i, index) => {
-      createFilesFromCategoryData(EN_LOCALE_DIR, i, index);
+    categoryItems.forEach((item) => {
+      createFilesFromCategoryData(EN_LOCALE_DIR, item);
     });
 
-    jaCategoryItems.forEach((i, index) => {
-      createFilesFromCategoryData(JA_LOCALE_DIR, i, index);
+    jaCategoryItems.forEach((item) => {
+      createFilesFromCategoryData(JA_LOCALE_DIR, item);
     });
 
-    koCategoryItems.forEach((i, index) => {
-      createFilesFromCategoryData(KO_LOCALE_DIR, i, index);
+    koCategoryItems.forEach((item) => {
+      createFilesFromCategoryData(KO_LOCALE_DIR, item);
     });
 
     console.log('✅ Doc files are created successfully');

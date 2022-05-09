@@ -1,3 +1,3 @@
 export const type = {
-  CHANGE_LANG: 'FLIP_CHANGE_LANGUP',
+  CHANGE_LANG: 'CHANGE_LANG',
 };
