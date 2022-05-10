@@ -32,6 +32,9 @@ function NodeTree({ items }) {
                   width: '100%',
                   display: 'inline-block',
                 }}
+                activeStyle={{
+                  backgroundColor: BACKGROUND_GRAY,
+                }}
               >
                 {item.label}
               </ActiveLink>
