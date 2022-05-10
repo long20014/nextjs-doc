@@ -10,6 +10,7 @@ export default function ActiveLink({
   path,
   type,
   hoverStyle,
+  activeStyle,
   customStyle,
 }) {
   const router = useRouter();
@@ -28,14 +29,25 @@ export default function ActiveLink({
     }
     return { ...hoverStyle, color: isActive ? PRIMARY_GREEN : TEXT_GRAY };
   };
+
+  const getNormalStyle = () => {
+    if (isActive) {
+      return {
+        color: PRIMARY_GREEN,
+        ...activeStyle,
+      };
+    }
+    return {
+      color: TEXT_GRAY,
+    };
+  };
+
   const styles = {
     common: {
       textDecoration: 'none',
       cursor: 'pointer',
     },
-    normal: {
-      color: isActive ? PRIMARY_GREEN : TEXT_GRAY,
-    },
+    normal: getNormalStyle(),
     hover: getHoverStyle(),
   };
 
