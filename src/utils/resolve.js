@@ -6,5 +6,5 @@ export const resolveLangPath = (path) => {
   if (lang.length > 1) {
     return lang[1].substring(0, 2);
   }
-  return null;
+  return 'en';
 };

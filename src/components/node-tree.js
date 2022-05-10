@@ -4,12 +4,11 @@ import { useRouter } from 'next/router';
 import constants from 'src/utils/constants';
 import useHover from 'src/hooks/useHover';
 import classNames from 'classnames';
-
-const { SIDEBAR_LINK } = constants;
+const { SIDEBAR_LINK, PRIMARY_GREEN, TEXT_GRAY, BACKGROUND_GRAY } = constants;
 
 export default function Root({ items }) {
   return (
-    <div className="node-tree expand">
+    <div className="node-tree expanded">
       <NodeTree items={items} />
     </div>
   );
@@ -22,7 +21,18 @@ function NodeTree({ items }) {
         if (!item.items) {
           return (
             <li key={item.to}>
-              <ActiveLink href={item.to} path={item.path} type={SIDEBAR_LINK}>
+              <ActiveLink
+                href={item.to}
+                path={item.path}
+                type={SIDEBAR_LINK}
+                hoverStyle={{ backgroundColor: BACKGROUND_GRAY }}
+                customStyle={{
+                  padding: '3px 0.5em',
+                  borderRadius: '5px',
+                  width: '100%',
+                  display: 'inline-block',
+                }}
+              >
                 {item.label}
               </ActiveLink>
             </li>
@@ -45,44 +55,45 @@ function Dropdown({ item }) {
       cursor: 'pointer',
     },
     normal: {
-      color: isActive ? 'red' : '#82888f',
+      color: isActive ? PRIMARY_GREEN : TEXT_GRAY,
     },
     hover: {
-      color: 'hsl(206deg 81% 50%)',
+      color: isActive ? PRIMARY_GREEN : TEXT_GRAY,
+      backgroundColor: BACKGROUND_GRAY,
     },
   };
 
-  const [expand, setExpand] = useState(item.isExpanded);
+  const [expanded, setExpanded] = useState(item.isExpanded);
 
   const handleClick = (target) => {
-    setExpand((expand) => !expand);
-    if (!expand) {
-      target.parentNode.classList.add('expand');
+    setExpanded((expanded) => !expanded);
+    if (!expanded) {
+      target.parentNode.classList.add('expanded');
     } else {
-      target.parentNode.classList.remove('expand');
+      target.parentNode.classList.remove('expanded');
     }
   };
 
   useEffect(() => {
     if (isActive) {
-      if (!expand) {
+      if (!expanded) {
         handleClick(hoverRef.current);
       }
     }
   }, [router.asPath]);
 
   return (
-    <li className={classNames({ expand: item.isExpanded })}>
+    <li className={classNames({ expanded: item.isExpanded })}>
       <div
         ref={hoverRef}
-        onClick={(e) => handleClick(e.target)}
+        onClick={(e) => handleClick(hoverRef.current)}
         style={{
           ...(isHovered ? styles.hover : styles.normal),
           ...styles.common,
         }}
-        className="sidebar-item light-gray-text"
+        className="sidebar-item light-gray-text dropdown-label"
       >
-        {expand ? '-' : '+'} {item.label}
+        <span className="label-text">{item.label}</span>
       </div>
       <NodeTree items={item.items} />
     </li>

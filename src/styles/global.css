@@ -1,14 +1,17 @@
 :root {
-  --ifm-container-width: 1920px;
+  --container-width: 1920px;
   --sidebar-width: 300px;
+  --toc-width: 250px;
   --header-height: 3rem;
   --light-gray: #c3c3c3;
   --light-gray-bg: #fcfcfd;
   --light-gray-text: #82888f;
   --green-primary: #2e8555;
   --hidden-sidebar-width: 30px;
-  --standard-transtion-timing: 0.3s;
-  --fast-transtion-timing: 0.2s;
+  --standard-transition-timing: 300ms;
+  --fast-transition-timing: 200ms;
+  --really-fast-transition-timing: 150ms;
+  --instant-transition-timing: 25ms;
 }
 
 html,
@@ -71,7 +74,7 @@ img {
 .post-container {
   flex: 1;
   margin: 0 auto;
-  max-width: calc(var(--ifm-container-width) - var(--sidebar-width));
+  max-width: calc(var(--container-width) - var(--toc-width));
   display: flex;
 }
 
@@ -84,7 +87,7 @@ img {
 
 .sidebar-container {
   width: var(--sidebar-width);
-  transition: width var(--standard-transtion-timing) ease;
+  transition: width var(--standard-transition-timing) ease;
   will-change: width;
   margin-top: calc(var(--header-height)*-1);
   border-right: 1px solid var(--light-gray);
@@ -112,6 +115,37 @@ img {
   padding-top: var(--header-height);
 }
 
+.sidebar .dropdown-label {
+  display: flex;
+  justify-content: space-between;
+  padding: 3px 0.5em;
+  border-radius: 5px;
+  /* align-items: center; */
+}
+
+.sidebar .dropdown-label:after {
+  transition: transform var(--instant-transition-timing) linear;
+  transform: rotate(0);
+  width: 1em;
+  height: 1em;
+  transform-origin: 50% 60%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25em;
+  content: '›';
+}
+
+.sidebar .expanded > .dropdown-label:after {
+  transition: transform var(--really-fast-transition-timing) linear;
+  transform: rotate(90deg);
+}
+
+.sidebar .dropdown-label .label-text {
+  max-width: 85%;
+  word-wrap: break-word;
+}
+
 .sidebar-hidden {
   height: 0;
   opacity: 0;
@@ -127,10 +161,6 @@ img {
   text-decoration: none;
 }
 
-.sidebar ul {
-  transition: all var(--standard-transtion-timing) ease;
-}
-
 .sidebar ul:first-child {
   margin-top: 0;
 }
@@ -140,7 +170,19 @@ img {
 }
 
 .sidebar ul:not(:first-child) {
-  padding-inline-start: 1.5em;
+  padding-inline-start: 1em;
+}
+
+.sidebar ul {
+  height: 0;
+  overflow: hidden; 
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.sidebar .expanded > ul {
+  height: auto;
+  opacity: 1;
 }
 
 .sidebar .button {
@@ -150,25 +192,18 @@ img {
   border-right: 1px solid var(--light-gray);
   border-left: 0px;
   border-bottom: 0px;
-  transition: all var(--standard-transtion-timing) ease;
+  transition: all var(--standard-transition-timing) ease;
   padding: 10px;
   font-size: 1rem;
+  color: var(--light-gray-text);
 }
 
 .sidebar .button:hover {
   background-color: #eee;
 }
 
-.sidebar ul {
-  display: none;
-}
-
-.sidebar .expand > ul {
-  display: block 
-}
-
 .sidebar .tree-section {
-  padding: 1em;
+  padding: 0.5em;
 }
 
 .hidden-sidebar {
@@ -182,8 +217,9 @@ img {
   position: sticky;
   top: var(--header-height);
   font-size: 1rem;
-  transition: background-color var(--standard-transtion-timing) ease;
+  transition: background-color var(--standard-transition-timing) ease;
   margin: 0 auto;
+  color: var(--light-gray-text);
 }
 
 .hidden-sidebar:hover {
@@ -191,7 +227,7 @@ img {
 } 
 
 .table-of-content-container {
-  width: var(--sidebar-width);
+  width: var(--toc-width);
   font-size: 12px;
   position: relative;
   background-color: white;
@@ -199,7 +235,7 @@ img {
 
 .table-of-content {
   margin-top: 1rem;
-  width: calc(var(--sidebar-width) - 1rem);
+  width: calc(var(--toc-width) - 1rem);
   border-left: 1px solid var(--light-gray);
   font-size: 12px;
   color: var(--light-gray-text);
@@ -266,7 +302,7 @@ img {
 }
 
 #header .logo-section {
-  margin-right: 90px;
+  margin-right: 97px;
 }
 
 .post-nav .post-nav-button {
@@ -338,7 +374,7 @@ img {
   overflow-y: auto;
   padding: 0.5rem;
   transform: translateY(-0.625rem);
-  transition-duration: var(--fast-transtion-timing);
+  transition-duration: var(--fast-transition-timing);
   transition-property: opacity,transform,visibility;
   transition-timing-function: cubic-bezier(0.08,0.52,0.52,1);
   z-index: 16;
@@ -354,7 +390,7 @@ img {
   padding: 5px;
   font-size: 15px;
   transition-property: background-color,color;
-  transition-duration: var(--standard-transtion-timing);
+  transition-duration: var(--standard-transition-timing);
   transition-timing-function: ease;
 }
 

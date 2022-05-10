@@ -2,6 +2,8 @@ import React from 'react';
 import jump from 'jump.js';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import constants from 'src/utils/constants';
+const { TEXT_GOLDEN } = constants;
 
 const easeInOutQuad = (t, b, c, d) => {
   t /= d / 2;
@@ -20,7 +22,7 @@ export default function TableOfContent({}) {
     common: {},
     normal: {},
     hover: {
-      color: 'hsla(34, 83%, 49%, 0.493)',
+      color: TEXT_GOLDEN,
     },
   };
 
