@@ -105,6 +105,7 @@ function resolveSidebar() {
       {
         type: 'category',
         label: categoryTitle,
+        path: localePath,
         name: name,
         to: `${localePath}/${name}`,
         items: pageTitles.concat(childDropdowns),
