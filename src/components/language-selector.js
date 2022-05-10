@@ -19,7 +19,8 @@ export default function languageSelector() {
   ];
 
   const getLanguageLabel = (lang) => {
-    return languageList.find((item) => item.value === lang).label;
+    const langItem = languageList.find((item) => item.value === lang);
+    return langItem.label;
   };
 
   useEffect(() => {
