@@ -74,6 +74,7 @@ export default function Header() {
               href={item.to}
               path={item.path}
               type={NAVBAR}
+              customStyle={{ marginRight: '1rem' }}
             >
               {item.label}
             </ActiveLink>

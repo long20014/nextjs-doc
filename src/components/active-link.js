@@ -1,10 +1,17 @@
 import { useRouter } from 'next/router';
-import constants from 'src/utils/constants';
 import React from 'react';
-import useHover from '../hooks/useHover';
-const { NAVBAR } = constants;
+import useHover from 'src/hooks/useHover';
+import constants from 'src/utils/constants';
+const { NAVBAR, PRIMARY_GREEN, TEXT_GRAY } = constants;
 
-export default function ActiveLink({ children, href, path, type }) {
+export default function ActiveLink({
+  children,
+  href,
+  path,
+  type,
+  hoverStyle,
+  customStyle,
+}) {
   const router = useRouter();
   const [hoverRef, isHovered] = useHover();
   const isActive = (() => {
@@ -13,18 +20,23 @@ export default function ActiveLink({ children, href, path, type }) {
     }
     return router.asPath === href + '/';
   })();
+  const getHoverStyle = () => {
+    if (!hoverStyle) {
+      return {
+        color: PRIMARY_GREEN,
+      };
+    }
+    return { ...hoverStyle, color: isActive ? PRIMARY_GREEN : TEXT_GRAY };
+  };
   const styles = {
     common: {
-      marginRight: '1rem',
       textDecoration: 'none',
       cursor: 'pointer',
     },
     normal: {
-      color: isActive ? 'red' : '#82888f',
+      color: isActive ? PRIMARY_GREEN : TEXT_GRAY,
     },
-    hover: {
-      color: 'hsl(206deg 81% 50%)',
-    },
+    hover: getHoverStyle(),
   };
 
   const handleClick = (e) => {
@@ -32,14 +44,14 @@ export default function ActiveLink({ children, href, path, type }) {
     router.push(href);
   };
 
-  const hoverStyle = isHovered ? styles.hover : styles.normal;
+  const displayedStyle = isHovered ? styles.hover : styles.normal;
 
   return (
     <a
       ref={hoverRef}
       href={href}
       onClick={handleClick}
-      style={{ ...hoverStyle, ...styles.common }}
+      style={{ ...displayedStyle, ...styles.common, ...customStyle }}
       className="light-gray-text active-link"
     >
       {children}
