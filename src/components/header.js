@@ -28,7 +28,6 @@ const getNavbarItems = (locale) => {
 const linkStyles = {
   display: 'flex',
   alignItems: 'center',
-  textDecoration: 'none',
   color: 'black',
 };
 
