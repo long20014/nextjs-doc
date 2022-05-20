@@ -3,10 +3,11 @@
   --sidebar-width: 300px;
   --toc-width: 250px;
   --header-height: 3rem;
-  --light-gray: #c3c3c3;
+  --light-gray: #dadde1;
   --light-gray-bg: #fcfcfd;
   --light-gray-text: #82888f;
   --green-primary: #2e8555;
+  --footer-background: #f5f6f7;
   --hidden-sidebar-width: 30px;
   --standard-transition-timing: 300ms;
   --fast-transition-timing: 200ms;
@@ -21,7 +22,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu,
     Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   line-height: 1.6;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 * {
@@ -279,16 +280,6 @@ img {
   align-items: center;
 }
 
-.footer {
-  padding: 0 1.5em;
-  border-top: 1px solid var(--light-gray);
-  height: 3rem;
-  display: flex;
-  align-items: center;
-  width: 100%;
-  background-color: white;
-}
-
 .light-gray-text {
   color: var(--light-gray-text);
 }
@@ -403,4 +394,64 @@ img {
 
 .language-selector .language-dropdown-menu li:hover {
   cursor: pointer;
+}
+
+.normal-link {
+  text-decoration: none;
+}
+
+.footer {
+  padding: 2rem;
+  /* border-top: 1px solid var(--light-gray); */
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background-color: var(--footer-background);
+  justify-content: center;
+}
+
+.footer .footer-container {
+  max-width: 1140px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.footer .footer-container .link-area {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.footer .footer-container .link-area .item-title {
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.footer .footer-container .link-area .link-item {
+  width: 100%;
+  flex: 1 0;
+  margin-left: 0;
+  color: var(--light-gray-text);
+  transition: color var(--fast-transition-timing) ease;
+  line-height: 2;
+  font-weight: 300;
+}
+
+.footer .footer-container .link-area .link-item:hover {
+  color: var(--green-primary);
+}
+
+.footer .footer-container .copyright-area {
+  text-align: center;
+  width: 100%;
+  font-weight: 300;
+}
+
+
+@media (min-width: 1440px) {
+  .footer .footer-container {
+    max-width: 1320px;
+  }
 }
