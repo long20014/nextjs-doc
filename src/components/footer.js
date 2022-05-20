@@ -29,7 +29,7 @@ export default function Footer() {
           height="13.5"
           aria-hidden="true"
           viewBox="0 0 24 24"
-          class="iconExternalLink_I5OW"
+          className="iconExternalLink_I5OW"
         >
           <path
             fill="currentColor"
