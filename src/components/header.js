@@ -10,6 +10,7 @@ import LanguageSelector from './language-selector';
 import { useLangContext } from 'src/contexts/language';
 import { useRouter } from 'next/router';
 import { resolveLangPath } from 'src/utils/resolve';
+import { toggleMobileSidebar } from 'src/lib/dom-interaction';
 
 const { NAVBAR } = constants;
 const { config: navbarConfig } = headerData;
@@ -59,6 +60,17 @@ export default function Header() {
 
   return (
     <div id="header">
+      <div className="burger-button" onClick={toggleMobileSidebar}>
+        <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true">
+          <path
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeMiterlimit="10"
+            strokeWidth="2"
+            d="M4 7h22M4 15h22M4 23h22"
+          ></path>
+        </svg>
+      </div>
       <div className="logo-section">
         <NormalLink href={`/?lang=${state.lang}`} style={linkStyles}>
           <Logo src={navbarConfig.logo.src} />

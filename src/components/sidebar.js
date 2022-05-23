@@ -8,6 +8,7 @@ import React, { useState, useEffect } from 'react';
 import { useLangContext } from 'src/contexts/language';
 import classNames from 'classnames';
 import { resolveLangPath } from 'src/utils/resolve';
+import { toggleMobileSidebar } from 'src/lib/dom-interaction';
 
 const getSidebarItems = (locale) => {
   let sidebarItems = SidebarDataEn.sidebarItems;
@@ -79,14 +80,39 @@ export default function Sidebar() {
 
   const sidebar = getSidebar();
   const items = [sidebar];
+
+  const renderDesktopSidebar = () => {
+    return (
+      <aside
+        className={classNames('sidebar-container', {
+          'sidebar-container-hidden': hide,
+        })}
+      >
+        {renderExpandSidebar(hide)}
+        {hide && renderHiddenSidebar()}
+      </aside>
+    );
+  };
+
+  const renderMobileSidebar = () => {
+    return (
+      <div className="backdrop hidden" onClick={toggleMobileSidebar}>
+        <aside
+          className={classNames('mobile-sidebar-container', {
+            'sidebar-container-hidden': hide,
+          })}
+        >
+          {/* {renderExpandSidebar(hide)}
+          {hide && renderHiddenSidebar()} */}
+        </aside>
+      </div>
+    );
+  };
+
   return (
-    <aside
-      className={classNames('sidebar-container', {
-        'sidebar-container-hidden': hide,
-      })}
-    >
-      {renderExpandSidebar(hide)}
-      {hide && renderHiddenSidebar()}
-    </aside>
+    <>
+      {renderDesktopSidebar()}
+      {renderMobileSidebar()}
+    </>
   );
 }

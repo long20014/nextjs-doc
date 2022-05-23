@@ -2,7 +2,7 @@
   --container-width: 1920px;
   --sidebar-width: 300px;
   --toc-width: 250px;
-  --header-height: 3rem;
+  --header-height: 4rem;
   --light-gray: #dadde1;
   --light-gray-bg: #fcfcfd;
   --light-gray-text: #82888f;
@@ -13,6 +13,7 @@
   --fast-transition-timing: 200ms;
   --really-fast-transition-timing: 150ms;
   --instant-transition-timing: 25ms;
+  --toc-bg: #f2f2f2;
 }
 
 html,
@@ -53,8 +54,9 @@ img {
   top: 0;
   z-index: 15;
   background-color: white;
-  padding: 0 1rem;
+  padding: 0.5rem 1rem;
 };
+
 
 #container {
   width: 100vw;
@@ -228,6 +230,10 @@ img {
   background-color: #eee;
 } 
 
+.mobile-table-of-content-container {
+  display: none;  
+} 
+
 .table-of-content-container {
   width: var(--toc-width);
   font-size: 12px;
@@ -249,7 +255,8 @@ img {
   overflow-y: auto;
 }
 
-.table-of-content ul {
+.table-of-content ul,
+.mobile-table-of-content ul {
   padding-inline-start: 1.5em;
   list-style: none;
 }
@@ -342,7 +349,7 @@ img {
   content: "";
   margin-left: 0.3em;
   position: relative;
-  top: 16px;
+  top: 14px;
   transform: translateY(-50%);
 }
 
@@ -453,5 +460,160 @@ img {
 @media (min-width: 1440px) {
   .footer .footer-container {
     max-width: 1320px;
+  }
+}
+
+@media screen and (min-width: 679px) {
+  #header .burger-button {
+    display: none;
+  }
+
+  .mobile-sidebar-container {
+    display: none;
+  }
+
+  .backdrop {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 678px) {
+  .sidebar-container {
+    display: none;
+  }
+
+  .nav-section {
+    display: none;
+  }
+
+  #header .logo-section {
+    margin-right: 0;
+  }
+
+  .post-container {
+    max-width: 100vw;
+  }
+
+  .page-content {
+    max-width: 100%;
+  }
+
+  .post-nav-button {
+    max-width: 45vw;
+  }
+
+  #header .burger-button {
+    display: flex;
+    margin-right: 0.5rem;
+    align-items: center;
+  }
+
+  .mobile-sidebar-container {
+    display: flex;
+    width: var(--sidebar-width);
+    height: 100vh;
+    position: fixed;
+    border-right: 1px solid var(--light-gray);
+    background-color: var(--light-gray-bg);
+    transition: width var(--standard-transition-timing) ease;
+    z-index: 20;
+    top: 0;
+  }
+
+  .backdrop {
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 19;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+  }
+
+  .backdrop.hidden {
+    display: none;
+  }
+
+  .backdrop.hidden .mobile-sidebar-container {
+    display: none;
+  }
+
+  .language-selector {
+    display: none;
+  }
+
+  .table-of-content-container {
+    display: none;
+  }
+
+  .mobile-table-of-content-container {
+    width: 100%;
+    display: flex;
+    padding: 1em 1em 0 1em;
+    flex-direction: column;
+  } 
+
+  .mobile-table-of-content-container .toc-expand-button.expanded {
+    border-radius: 5px 5px 0 0;
+    border-bottom: 1px solid var(--light-gray);
+  }
+
+  .mobile-table-of-content-container .toc-expand-button {
+    width: 100%;
+    border-radius: 5px;
+    border-bottom: none;
+    background-color: var(--toc-bg);  
+    display: flex;
+    justify-content: space-between;
+    font-size: 15px;
+    font-weight: 300;
+    padding: 0.25em 1em;
+  }
+
+  .mobile-table-of-content-container .mobile-table-of-content {
+    max-height: 0;
+    border: none;
+    overflow: hidden;
+    background-color: var(--toc-bg);
+    transition: max-height var(--standard-transition-timing) ease;
+    position: sticky;
+    word-break: break-all;
+    z-index: 10;
+    width: 100%;
+    font-size: 12px;
+    color: var(--light-gray-text);
+  }
+
+  .mobile-table-of-content-container .mobile-table-of-content.expanded {
+    border-radius: 0 0 5px 5px;
+    max-height: 25vh; 
+    overflow-y: auto;
+  }
+
+  .mobile-table-of-content::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mobile-table-of-content-container .toc-expand-button-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .mobile-table-of-content-container .toc-expand-button-label:after {
+    transition: transform var(--fast-transition-timing) linear;
+    transform: rotate(0);
+    width: 1em;
+    height: 1em;
+    transform-origin: 50% 60%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25em;
+    content: '›';
+  }
+
+  .mobile-table-of-content-container .expanded .toc-expand-button-label:after {
+    transform: rotate(90deg);
   }
 }

@@ -12,7 +12,7 @@ export default function NormalLink({ href, children, style, classes }) {
       href={href}
       onClick={handleClick}
       style={style}
-      className={`normal-link ${classes}`}
+      className={`normal-link ${classes || ''}`}
     >
       {children}
     </a>

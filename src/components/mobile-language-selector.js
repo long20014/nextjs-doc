@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import useLanguage from 'src/hooks/useLanguage';
 
-export default function LanguageSelector() {
+export default function MobileLanguageSelector() {
   const {
     getLanguageLabel,
     changeLanguage,
@@ -50,5 +50,9 @@ export default function LanguageSelector() {
     );
   };
 
-  return renderDesktopLanguageSelector();
+  const renderMobileLanguageSelector = () => {
+    return <div className="mobile-language-selector"></div>;
+  };
+
+  return renderMobileLanguageSelector();
 }
