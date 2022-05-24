@@ -1,9 +1,6 @@
 import React from 'react';
-import constants from 'src/utils/constants';
 import classNames from 'classnames';
 import useTOC from 'src/hooks/useTOC';
-
-const { TEXT_GOLDEN } = constants;
 
 export default function MobileTableOfContent({}) {
   const {
@@ -11,7 +8,7 @@ export default function MobileTableOfContent({}) {
     TOC,
     mobileTOCDisplay,
     toggleTOCDisplay,
-    order,
+    mobileTOCBtnActive,
   } = useTOC();
 
   const renderMobileTOCItem = (item) => {
@@ -38,6 +35,7 @@ export default function MobileTableOfContent({}) {
         <div
           className={classNames('toc-expand-button', {
             expanded: mobileTOCDisplay,
+            active: mobileTOCBtnActive,
           })}
           onClick={toggleTOCDisplay}
         >
@@ -54,5 +52,5 @@ export default function MobileTableOfContent({}) {
     );
   };
 
-  return renderMobileTOC();
+  return TOC.length > 0 && renderMobileTOC();
 }

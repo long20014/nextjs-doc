@@ -35,10 +35,10 @@ function InnerLayout({ children, home }) {
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
 
-      <Header />
+      <Header home={home} />
       <div className="outer-container">
         {!home && <MobileTableOfContent />}
-        {!home && <Sidebar />}
+        {<Sidebar home={home} />}
         <main className="post-container">
           {children}
           {!home && <TableOfContent />}

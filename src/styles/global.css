@@ -6,6 +6,7 @@
   --light-gray: #dadde1;
   --light-gray-bg: #fcfcfd;
   --light-gray-text: #82888f;
+  --bg-gray: rgba(0,0,0,0.05);
   --green-primary: #2e8555;
   --footer-background: #f5f6f7;
   --hidden-sidebar-width: 30px;
@@ -272,6 +273,8 @@ img {
 .page-content {
   padding: 1em;
   flex: 1;
+  word-break: break-word;
+  max-width: 100%;
 }
 
 .post-nav {
@@ -403,7 +406,7 @@ img {
   cursor: pointer;
 }
 
-.normal-link {
+.normal-link:hover {
   text-decoration: none;
 }
 
@@ -463,7 +466,7 @@ img {
   }
 }
 
-@media screen and (min-width: 679px) {
+@media screen and (min-width: 913px) {
   #header .burger-button {
     display: none;
   }
@@ -477,7 +480,7 @@ img {
   }
 }
 
-@media screen and (max-width: 678px) {
+@media screen and (max-width: 912px) {
   .sidebar-container {
     display: none;
   }
@@ -494,10 +497,6 @@ img {
     max-width: 100vw;
   }
 
-  .page-content {
-    max-width: 100%;
-  }
-
   .post-nav-button {
     max-width: 45vw;
   }
@@ -507,19 +506,6 @@ img {
     margin-right: 0.5rem;
     align-items: center;
   }
-
-  .mobile-sidebar-container {
-    display: flex;
-    width: var(--sidebar-width);
-    height: 100vh;
-    position: fixed;
-    border-right: 1px solid var(--light-gray);
-    background-color: var(--light-gray-bg);
-    transition: width var(--standard-transition-timing) ease;
-    z-index: 20;
-    top: 0;
-  }
-
   .backdrop {
     background-color: rgba(0, 0, 0, 0.3);
     z-index: 19;
@@ -527,14 +513,97 @@ img {
     width: 100vw;
     height: 100vh;
     top: 0;
+    transition: opacity var(--standard-transition-timing) ease;
+    opacity: 1;
   }
 
   .backdrop.hidden {
-    display: none;
+    opacity: 0;
+    width: 0;
   }
 
   .backdrop.hidden .mobile-sidebar-container {
-    display: none;
+    left: calc(0px - var(--sidebar-width));
+  }
+  
+  .mobile-sidebar-container {
+    display: flex;
+    width: var(--sidebar-width);
+    height: 100vh;
+    position: fixed;
+    border-right: 1px solid var(--light-gray);
+    background-color: var(--light-gray-bg);
+    transition: left var(--standard-transition-timing) ease;
+    left: 0;
+    z-index: 20;
+    top: 0;
+  }
+
+  .mobile-sidebar-container .sidebar {
+    padding-top: 0;
+    justify-content: initial;
+  }
+
+  .mobile-sidebar-container .sidebar .close-sidebar-button {
+    display: flex;
+    align-items: center;
+  }
+
+  .mobile-sidebar-container .sidebar .logo-section {
+    height: var(--header-height);
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid var(--light-gray);
+    justify-content: space-between;
+  }
+
+  .mobile-sidebar-container .sidebar .nav-section {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5em;
+    transform: translateX(0);
+    transition: transform var(--standard-transition-timing) ease;
+  }
+
+  .mobile-sidebar-container .sidebar .nav-section.hidden {
+    transform: translateX(300px);
+    font-size: 0;
+    height: 0;
+  }
+
+  .mobile-sidebar-container .sidebar .tree-section {
+    transform: translateX(0);
+    transition: transform var(--standard-transition-timing) ease;
+    padding: 0.25em 0.5em;
+  }
+
+  .mobile-sidebar-container .sidebar .tree-section.hidden {
+    transform: translateX(-300px);
+    font-size: 0;
+    height: 0;
+    width: 0;
+  }
+
+  .mobile-sidebar-container .sidebar .back-to-main-menu-btn,
+  .mobile-sidebar-container .sidebar .go-to-category-menu-btn {
+    background-color: var(--toc-bg);
+    width: 100%;
+    padding: 0.5em 1em;
+    font-weight: bold;
+    color: black;
+    transform: translateX(0);
+    transition: transform var(--standard-transition-timing) ease;
+  }
+
+  .mobile-sidebar-container .sidebar .back-to-main-menu-btn.hidden {
+    transform: translateX(-300px);
+    font-size: 0;
+  }
+
+  .mobile-sidebar-container .sidebar .go-to-category-menu-btn.hidden {
+    transform: translateX(300px);
+    font-size: 0;
   }
 
   .language-selector {
@@ -552,7 +621,7 @@ img {
     flex-direction: column;
   } 
 
-  .mobile-table-of-content-container .toc-expand-button.expanded {
+  .mobile-table-of-content-container .toc-expand-button.active {
     border-radius: 5px 5px 0 0;
     border-bottom: 1px solid var(--light-gray);
   }
@@ -615,5 +684,18 @@ img {
 
   .mobile-table-of-content-container .expanded .toc-expand-button-label:after {
     transform: rotate(90deg);
+  }
+
+  .mobile-language-selector ul{
+    margin: 0;
+  }
+
+  .mobile-language-selector ul li{
+    padding: 0.25em 0.5em;
+  }
+
+  .mobile-language-selector ul li.active{
+    background-color: var(--bg-gray);
+    border-radius: 5px;
   }
 }

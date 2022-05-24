@@ -1,7 +1,11 @@
 import SidebarDataEn from 'built-data/sidebar-tree-en.json';
 import SidebarDataKo from 'built-data/sidebar-tree-ko.json';
 import SidebarDataJa from 'built-data/sidebar-tree-ja.json';
+import navbarDataEn from 'built-data/navbar-en.json';
+import navbarDataJa from 'built-data/navbar-ja.json';
+import navbarDataKo from 'built-data/navbar-ko.json';
 import NodeTree from './node-tree';
+import ActiveLink from './active-link';
 import { useRouter } from 'next/router';
 import { toCapitalize } from 'src/utils/format';
 import React, { useState, useEffect } from 'react';
@@ -9,6 +13,21 @@ import { useLangContext } from 'src/contexts/language';
 import classNames from 'classnames';
 import { resolveLangPath } from 'src/utils/resolve';
 import { toggleMobileSidebar } from 'src/lib/dom-interaction';
+import headerData from 'fetched-data/navbar-data.json';
+import NormalLink from './normal-link';
+import Logo from './logo';
+import Title from './title';
+import constants from 'src/utils/constants';
+import MobileLanguageSelector from './mobile-language-selector';
+
+const { NAVBAR, BACKGROUND_GRAY } = constants;
+const { config: navbarConfig } = headerData;
+
+const linkStyles = {
+  display: 'flex',
+  alignItems: 'center',
+  color: 'black',
+};
 
 const getSidebarItems = (locale) => {
   let sidebarItems = SidebarDataEn.sidebarItems;
@@ -21,9 +40,22 @@ const getSidebarItems = (locale) => {
   return sidebarItems;
 };
 
-export default function Sidebar() {
-  const [hide, setHide] = useState(false);
+const getNavbarItems = (locale) => {
+  let navbarItems = navbarDataEn.navbarItems;
+  if (locale === 'ko') {
+    navbarItems = navbarDataKo.navbarItems;
+  }
+  if (locale === 'ja') {
+    navbarItems = navbarDataJa.navbarItems;
+  }
+  return navbarItems;
+};
+
+export default function Sidebar({ home }) {
   const { state } = useLangContext();
+  const [hide, setHide] = useState(false);
+  const [isMainMenu, setIsMainMenu] = useState(home);
+  const [navbarItems, setNavbarItems] = useState(getNavbarItems(state.lang));
   const [sidebarItems, setSidebarItems] = useState(getSidebarItems(state.lang));
   const router = useRouter();
 
@@ -36,19 +68,35 @@ export default function Sidebar() {
     setSidebarItems(getSidebarItems(lang));
   }, [router.asPath]);
 
+  useEffect(() => {
+    setNavbarItems(getNavbarItems(state.lang));
+  }, [state.lang]);
+
+  const handleBackToMainMenu = () => {
+    setIsMainMenu(true);
+  };
+
+  const handleGoToCategoryMenu = () => {
+    setIsMainMenu(false);
+  };
+
   const sidebarPart = (() => {
     const pathParts = router.asPath.split('/');
     const postIndex = pathParts.indexOf('posts');
     if (postIndex !== -1) {
       let categorySideBar = pathParts[postIndex + 2];
       return categorySideBar;
-    } else {
-      throw new Error('category not found');
     }
+    return null;
   })();
+
   const getSidebar = () => {
-    return sidebarItems[`${toCapitalize(sidebarPart)}Sidebar`][0];
+    if (sidebarPart) {
+      return sidebarItems[`${toCapitalize(sidebarPart)}Sidebar`][0];
+    }
+    return null;
   };
+
   const toggleHideSidebar = () => {
     setHide((hide) => !hide);
   };
@@ -56,9 +104,7 @@ export default function Sidebar() {
   const renderExpandSidebar = (hide) => {
     return (
       <div className={classNames('sidebar', { 'sidebar-hidden': hide })}>
-        <div className="tree-section">
-          <NodeTree items={items} />
-        </div>
+        {renderNodeTree()}
         <button
           style={{ width: '100%', textAlign: 'center' }}
           className="button"
@@ -74,6 +120,93 @@ export default function Sidebar() {
     return (
       <div className="hidden-sidebar" onClick={toggleHideSidebar}>
         {'»'}
+      </div>
+    );
+  };
+
+  const renderNodeTree = () => {
+    return (
+      <div className={classNames('tree-section', { hidden: isMainMenu })}>
+        <NodeTree items={items} />
+      </div>
+    );
+  };
+
+  const renderBackToMainMenuButton = () => {
+    return (
+      <div
+        className={classNames('back-to-main-menu-btn', { hidden: isMainMenu })}
+        onClick={handleBackToMainMenu}
+      >
+        {' ← Back To Main Menu '}
+      </div>
+    );
+  };
+
+  const renderGoToCategoryMenuButton = () => {
+    return (
+      <div
+        className={classNames('go-to-category-menu-btn', {
+          hidden: !isMainMenu,
+        })}
+        onClick={handleGoToCategoryMenu}
+      >
+        {' Go To Category Menu →'}
+      </div>
+    );
+  };
+
+  const renderCategoryTree = () => {
+    return (
+      <div className={classNames('nav-section', { hidden: !isMainMenu })}>
+        {navbarItems.map((item) => {
+          return (
+            <ActiveLink
+              key={item.to}
+              href={item.to}
+              path={item.path}
+              type={NAVBAR}
+              customStyle={{
+                marginBottom: '3px',
+                padding: '0.25em 0.5em',
+                borderRadius: '5px',
+              }}
+              activeStyle={{
+                backgroundColor: BACKGROUND_GRAY,
+              }}
+            >
+              {item.label}
+            </ActiveLink>
+          );
+        })}
+        <MobileLanguageSelector></MobileLanguageSelector>
+      </div>
+    );
+  };
+
+  const renderMobileExpandSidebar = (hide) => {
+    return (
+      <div className={classNames('sidebar')}>
+        <div className="logo-section">
+          <NormalLink href={`/?lang=${state.lang}`} style={linkStyles}>
+            <Logo src={navbarConfig.logo.src} />
+            <Title title={navbarConfig.title} />
+          </NormalLink>
+          <div
+            className="close-sidebar-button"
+            onClick={(e) => toggleMobileSidebar(e)}
+          >
+            <svg viewBox="0 0 15 15" width="21" height="21">
+              <g stroke="var(--light-gray-text)" strokeWidth="1.2">
+                <path d="M.75.75l13.5 13.5M14.25.75L.75 14.25"></path>
+              </g>
+            </svg>
+          </div>
+        </div>
+        {!home && renderGoToCategoryMenuButton()}
+        {!home && renderBackToMainMenuButton()}
+        {!home && renderNodeTree()}
+        {renderCategoryTree()}
       </div>
     );
   };
@@ -96,14 +229,9 @@ export default function Sidebar() {
 
   const renderMobileSidebar = () => {
     return (
-      <div className="backdrop hidden" onClick={toggleMobileSidebar}>
-        <aside
-          className={classNames('mobile-sidebar-container', {
-            'sidebar-container-hidden': hide,
-          })}
-        >
-          {/* {renderExpandSidebar(hide)}
-          {hide && renderHiddenSidebar()} */}
+      <div className="backdrop hidden" onClick={(e) => toggleMobileSidebar(e)}>
+        <aside className={classNames('mobile-sidebar-container')}>
+          {renderMobileExpandSidebar()}
         </aside>
       </div>
     );
@@ -111,7 +239,7 @@ export default function Sidebar() {
 
   return (
     <>
-      {renderDesktopSidebar()}
+      {!home && renderDesktopSidebar()}
       {renderMobileSidebar()}
     </>
   );

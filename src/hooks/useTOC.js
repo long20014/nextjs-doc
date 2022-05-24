@@ -15,9 +15,20 @@ export default function useTOC() {
   const [order, setOrder] = useState(-1);
   const router = useRouter();
   const [mobileTOCDisplay, setMobileTOCDisplay] = useState(false);
+  const [mobileTOCBtnActive, setMobileTOCBtnActive] = useState(false);
 
   const toggleTOCDisplay = () => {
     setMobileTOCDisplay((mobileTOCDisplay) => !mobileTOCDisplay);
+    // The code below is used for button transition effect.
+    if (mobileTOCBtnActive) {
+      setTimeout(
+        () =>
+          setMobileTOCBtnActive((mobileTOCBtnActive) => !mobileTOCBtnActive),
+        300
+      );
+    } else {
+      setMobileTOCBtnActive((mobileTOCBtnActive) => !mobileTOCBtnActive);
+    }
   };
 
   useEffect(() => {
@@ -103,6 +114,7 @@ export default function useTOC() {
     handleClick,
     TOC,
     mobileTOCDisplay,
+    mobileTOCBtnActive,
     toggleTOCDisplay,
     order,
   };
