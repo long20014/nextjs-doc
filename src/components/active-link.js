@@ -15,31 +15,24 @@ export default function ActiveLink({
 }) {
   const router = useRouter();
   const [hoverRef, isHovered] = useHover();
+
   const isActive = (() => {
     if (type === NAVBAR) {
       return router.asPath.includes(path);
     }
     return router.asPath === href + '/';
   })();
+
   const getHoverStyle = () => {
+    // this if is used for default hover case
     if (!hoverStyle) {
-      return {
-        color: PRIMARY_GREEN,
-      };
+      return { color: PRIMARY_GREEN };
     }
     return { ...hoverStyle, color: isActive ? PRIMARY_GREEN : TEXT_GRAY };
   };
 
-  const getNormalStyle = () => {
-    if (isActive) {
-      return {
-        color: PRIMARY_GREEN,
-        ...activeStyle,
-      };
-    }
-    return {
-      color: TEXT_GRAY,
-    };
+  const getActiveStyle = () => {
+    return { ...activeStyle, color: PRIMARY_GREEN };
   };
 
   const styles = {
@@ -47,8 +40,11 @@ export default function ActiveLink({
       textDecoration: 'none',
       cursor: 'pointer',
     },
-    normal: getNormalStyle(),
+    normal: {
+      color: TEXT_GRAY,
+    },
     hover: getHoverStyle(),
+    active: getActiveStyle(),
   };
 
   const handleClick = (e) => {
@@ -56,7 +52,11 @@ export default function ActiveLink({
     router.push(href);
   };
 
-  const displayedStyle = isHovered ? styles.hover : styles.normal;
+  const displayedStyle = (() => {
+    if (isActive) return styles.active;
+    if (isHovered) return styles.hover;
+    return styles.normal;
+  })();
 
   return (
     <a

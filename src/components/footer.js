@@ -10,19 +10,19 @@ export default function Footer() {
   const renderLink = (link) => {
     const { title, items } = link;
     return (
-      <>
+      <React.Fragment key={title}>
         <div className="item-title">{title}</div>
         {items.map((item) => {
           return renderLinkItem(item);
         })}
-      </>
+      </React.Fragment>
     );
   };
 
   const renderLinkItem = (item) => {
     const { label, href } = item;
     return (
-      <NormalLink href={href} classes={'link-item'}>
+      <NormalLink key={href} href={href} classes={'link-item'}>
         {`${label}  `}
         <svg
           width="13.5"

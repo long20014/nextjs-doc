@@ -6,10 +6,13 @@ import headerData from 'fetched-data/navbar-data.json';
 import ActiveLink from './active-link';
 import constants from 'src/utils/constants';
 import NormalLink from './normal-link';
+import Logo from './logo';
+import Title from './title';
 import LanguageSelector from './language-selector';
 import { useLangContext } from 'src/contexts/language';
 import { useRouter } from 'next/router';
 import { resolveLangPath } from 'src/utils/resolve';
+import { toggleMobileSidebar } from 'src/lib/dom-interaction';
 
 const { NAVBAR } = constants;
 const { config: navbarConfig } = headerData;
@@ -31,19 +34,7 @@ const linkStyles = {
   color: 'black',
 };
 
-function Logo({ src }) {
-  if (src.startsWith('img')) {
-    const localSrc = src.replace('img', '/images');
-    return <img src={localSrc} height="42" style={{ marginRight: '5px' }} />;
-  }
-  return <img src={src} height="42" style={{ marginRight: '5px' }} />;
-}
-
-function Title({ title }) {
-  return <div style={{ marginRight: '2rem' }}>{title}</div>;
-}
-
-export default function Header() {
+export default function Header({ home }) {
   const router = useRouter();
   const { state } = useLangContext();
   const [navbarItems, setNavbarItems] = useState(getNavbarItems(state.lang));
@@ -57,8 +48,25 @@ export default function Header() {
     setNavbarItems(getNavbarItems(state.lang));
   }, [state.lang]);
 
+  const renderBurgerButton = () => {
+    return (
+      <div className="burger-button" onClick={(e) => toggleMobileSidebar(e)}>
+        <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true">
+          <path
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeMiterlimit="10"
+            strokeWidth="2"
+            d="M4 7h22M4 15h22M4 23h22"
+          ></path>
+        </svg>
+      </div>
+    );
+  };
+
   return (
     <div id="header">
+      {renderBurgerButton()}
       <div className="logo-section">
         <NormalLink href={`/?lang=${state.lang}`} style={linkStyles}>
           <Logo src={navbarConfig.logo.src} />
