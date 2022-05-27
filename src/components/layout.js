@@ -6,6 +6,7 @@ import React from 'react';
 import TableOfContent from './table-of-content';
 import MobileTableOfContent from './mobile-table-of-content';
 import { LangStateProvider } from 'src/contexts/language';
+import GoTopButton from './go-top-btn';
 
 export const siteTitle = 'Next.js Sample Website';
 
@@ -43,6 +44,7 @@ function InnerLayout({ children, home }) {
           {children}
           {!home && <TableOfContent />}
         </main>
+        <GoTopButton></GoTopButton>
       </div>
       <Footer />
     </div>

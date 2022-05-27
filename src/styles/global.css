@@ -4,6 +4,7 @@
   --toc-width: 250px;
   --header-height: 4rem;
   --light-gray: #dadde1;
+  --light-gray-2: #e4e8ee;
   --light-gray-bg: #fcfcfd;
   --light-gray-text: #82888f;
   --bg-gray: rgba(0,0,0,0.05);
@@ -412,7 +413,6 @@ img {
 
 .footer {
   padding: 2rem;
-  /* border-top: 1px solid var(--light-gray); */
   display: flex;
   align-items: center;
   width: 100%;
@@ -459,6 +459,29 @@ img {
   font-weight: 300;
 }
 
+.go-top-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+  background-color: var(--light-gray-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--standard-transition-timing) ease;
+  transform-origin: center center;
+  position: fixed;
+  bottom: 1.3rem;
+  right: 1.3rem;
+}
+
+.go-top-btn:hover {
+  background-color: var(--light-gray);
+  cursor: pointer;
+}
+
+.go-top-btn.hidden {
+  transform: scale(0);
+}
 
 @media (min-width: 1440px) {
   .footer .footer-container {

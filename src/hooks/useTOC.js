@@ -1,15 +1,9 @@
 import jump from 'jump.js';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { easeInOutQuad } from 'src/utils/utils';
 
 export default function useTOC() {
-  const easeInOutQuad = (t, b, c, d) => {
-    t /= d / 2;
-    if (t < 1) return (c / 2) * t * t + b;
-    t--;
-    return (-c / 2) * (t * (t - 2) - 1) + b;
-  };
-
   const [TOC, setTOC] = useState([]);
   const [headers, setHeaders] = useState([]);
   const [order, setOrder] = useState(-1);

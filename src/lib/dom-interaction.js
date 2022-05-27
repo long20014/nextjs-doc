@@ -12,7 +12,3 @@ export function toggleMobileSidebar(e) {
     }
   }
 }
-
-export function checkIsMobile() {
-  return window.innerWidth <= 678;
-}

@@ -24,6 +24,7 @@ export default function ActiveLink({
   })();
 
   const getHoverStyle = () => {
+    // this if is used for default hover case
     if (!hoverStyle) {
       return { color: PRIMARY_GREEN };
     }
