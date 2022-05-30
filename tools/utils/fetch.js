@@ -1,6 +1,10 @@
-const fs = require("fs");
-const fetch = require("node-fetch");
-const { FETCHED_DATA_DIR } = require("../constants");
+const fs = require('fs');
+const fetch = require('node-fetch');
+const { FETCHED_DATA_DIR } = require('../constants');
+const { getWikiPluginFromConfig } = require('../plugin/content-wiki/utils');
+const {
+  fetchContentFromTitleAndSpacekey,
+} = require('../plugin/content-wiki/get-wiki');
 
 const getJSON = (uri) => fetch(uri).then((response) => response.json());
 
@@ -60,10 +64,22 @@ async function fetchProjectData() {
       `${PROJECT_URL}/collections/navbar/item`,
       `${FETCHED_DATA_DIR}/navbar-data.json`
     );
-    console.log("-------");
-    console.log("✅ Fetched project data");
+
+    const { contentWikiPlugin } = getWikiPluginFromConfig();
+    if (contentWikiPlugin) {
+      try {
+        const { space, page_title } = contentWikiPlugin;
+
+        // Step 1: Fetch content
+        await fetchContentFromTitleAndSpacekey(page_title, space);
+      } catch (error) {
+        console.log('❌ Failed to create wiki content', error);
+      }
+    }
+    console.log('-------');
+    console.log('✅ Fetched project data');
   } catch (err) {
-    console.log("❌ An error occured while fetching project data", err);
+    console.log('❌ An error occured while fetching project data', err);
   }
 }
 

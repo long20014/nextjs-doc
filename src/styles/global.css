@@ -278,11 +278,44 @@ img {
   max-width: 100%;
 }
 
+.page-content table {
+  border-collapse: collapse;
+  display: block;
+  overflow: auto;
+  border-bottom: 1px solid #a2a4a7;
+}
+
+.page-content table tr {
+  background-color: transparent;
+  border-top: 1px solid #a2a4a7;
+  
+}
+
+.page-content table tr:last-child {
+  border-right: 1px solid #a2a4a7;
+} 
+
+.page-content table th {
+  padding: 0.75rem;
+  min-width: 120px;
+  border-left: 1px solid #a2a4a7;
+}
+
+.page-content table td {
+  border-left: 1px solid #a2a4a7;
+  padding: 0.75rem;
+}
+
+.page-content table td:last-child {
+  border-right: 1px solid #a2a4a7;
+} 
+
 .post-nav {
   display: flex;
   justify-content: space-between;
   width: 100%;
   margin-bottom: 2rem;
+  margin-top: 1rem;
 }
 
 .header {

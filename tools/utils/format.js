@@ -1,5 +1,15 @@
 const { NodeHtmlMarkdown } = require('node-html-markdown');
 
+const nhm = new NodeHtmlMarkdown(
+  { keepDataImages: true },
+  {
+    // Docusaurus TOC by default ignores h1 -> change h1->h2, h2->h3,...
+    'h1,h2,h3,h4,h5,h6': ({ node }) => ({
+      prefix: '##'.repeat(+node.tagName.charAt(1)) + ' ',
+    }),
+  }
+);
+
 function toKebabCase(str) {
   return (
     str &&
@@ -34,12 +44,19 @@ const formatPath = (path) => {
 };
 
 function convertHTMLToMarkdown(contentComponent) {
-  const nhm = new NodeHtmlMarkdown();
   const htmlString =
     (contentComponent._type === 'rich_text_editor' &&
       contentComponent.editor) ||
     '';
   return htmlString ? nhm.translate(htmlString) : '';
+}
+
+function toNonWhitespaced(str) {
+  return str.replace(/\s/g, '');
+}
+
+function convertHTMLContentToMarkdown(htmlContent) {
+  return nhm.translate(htmlContent);
 }
 
 module.exports = {
@@ -48,4 +65,6 @@ module.exports = {
   getPathParts,
   getCategoryPathPart,
   getLastPathPart,
+  toNonWhitespaced,
+  convertHTMLContentToMarkdown,
 };
