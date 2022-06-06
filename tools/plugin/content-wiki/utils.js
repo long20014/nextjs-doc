@@ -15,9 +15,9 @@ const data = {
 })();
 
 const defaultConfigData = require('../../../default-data/config-data.json');
-const { plugin } = configData || defaultConfigData;
+const { plugin } = data.configData || defaultConfigData;
 const defaultCategoryData = require('../../../default-data/category-data.json');
-const { items: categoryItems } = categoryData || defaultCategoryData;
+const { items: categoryItems } = data.categoryData || defaultCategoryData;
 const { getLocalePath } = require('../../utils/format');
 
 /**
