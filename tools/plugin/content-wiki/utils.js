@@ -1,8 +1,8 @@
 const cheerio = require('cheerio');
 
 const data = {
-  configData,
-  categoryData,
+  configData: null,
+  categoryData: null,
 };
 
 (function () {
