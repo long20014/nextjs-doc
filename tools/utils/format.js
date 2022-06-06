@@ -59,6 +59,14 @@ function convertHTMLContentToMarkdown(htmlContent) {
   return nhm.translate(htmlContent);
 }
 
+function getLocalePath(locale) {
+  return locale ? `/posts/${locale}` : '/posts';
+}
+
+function getLocaleFileName(fileName, locale) {
+  return locale ? `${fileName}-${locale}` : fileName;
+}
+
 module.exports = {
   toKebabCase,
   convertHTMLToMarkdown,
@@ -67,4 +75,6 @@ module.exports = {
   getLastPathPart,
   toNonWhitespaced,
   convertHTMLContentToMarkdown,
+  getLocalePath,
+  getLocaleFileName,
 };

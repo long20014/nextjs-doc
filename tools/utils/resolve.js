@@ -7,13 +7,7 @@ const data = {
   pageItemsJa: null,
 };
 
-const getLocalePath = (locale) => {
-  return locale ? `/posts/${locale}` : '/posts';
-};
-
-const getLocaleFileName = (fileName, locale) => {
-  return locale ? `${fileName}-${locale}` : fileName;
-};
+const { getLocalePath, getLocaleFileName } = require('./format');
 
 const { EN_LOCALE_DIR, JA_LOCALE_DIR, KO_LOCALE_DIR } = require('../constants');
 const { FETCHED_DATA_DIR, BUILT_DATA_DIR } = require('../constants');

@@ -2,6 +2,9 @@ const fetch = require('node-fetch');
 const fs = require('fs');
 const { encode } = require('base-64');
 const { toNonWhitespaced } = require('../utils/format');
+require('dotenv').config({
+  path: `.env${process.env.NODE_ENV ? `.${process.env.NODE_ENV}` : ''}`,
+});
 
 const WIKI_U = process.env.WIKI_U || '';
 const WIKI_P = process.env.WIKI_P || '';
@@ -14,8 +17,8 @@ async function createImageFile(link, rootDir) {
   const filename = toNonWhitespaced(decodeURIComponent(filenameFromPath));
   const imgPath = `${rootDir}/${filename}`;
   const absoluteImgPath = imgPath.split('public')?.[1] || imgPath;
-
-  if (fs.existsSync(imgPath)) {
+  // use in dev mode only
+  if (fs.existsSync(imgPath) && process.env.MODE === 'development') {
     return absoluteImgPath;
   }
 
@@ -30,7 +33,6 @@ async function createImageFile(link, rootDir) {
     console.log(`Saved image file to  ${imgPath}`)
   );
 
-  // const absoluteImgPath = imgPath.split('static')?.[1] || imgPath;
   return absoluteImgPath;
 }
 

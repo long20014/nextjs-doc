@@ -6,14 +6,17 @@ const { plugin } = configData || defaultConfigData;
 const categoryData = require('../../../fetched-data/category-data.json');
 const defaultCategoryData = require('../../../default-data/category-data.json');
 const { items: categoryItems } = categoryData || defaultCategoryData;
+const { getLocalePath } = require('../../utils/format');
 
 /**
  * Resolve the object containing the contentWikiPlugin and wikiCategory information from fetch jsons
  * @returns contentWikiPlugin: plugin in config and wikiCategory: designated category for wiki
  */
 function getWikiPluginFromConfig() {
-  const contentWikiPlugin = plugin?.find((i) => i._type === 'plugin_content_wiki') || {};
-  const wikiCategory = categoryItems?.find((c) => c.id === contentWikiPlugin?.category_id) || {};
+  const contentWikiPlugin =
+    plugin?.find((i) => i._type === 'plugin_content_wiki') || {};
+  const wikiCategory =
+    categoryItems?.find((c) => c.id === contentWikiPlugin?.category_id) || {};
 
   return { contentWikiPlugin, wikiCategory };
 }
@@ -80,7 +83,11 @@ function removeUnsupportedContentFromHTML(htmlContent, pathsArray) {
       // check its href with pages from internal page tree, replace href with path
       const foundPageFromTree = pathsArray.find((p) => p.wikiUrl === aHref);
       if (foundPageFromTree) {
-        $(this).attr('href', `${wikiCategoryPath}${foundPageFromTree.path}`);
+        const localePath = getLocalePath('en');
+        $(this).attr(
+          'href',
+          `${localePath}/${wikiCategoryPath}${foundPageFromTree.path}`
+        );
       }
     });
   }

@@ -8,6 +8,20 @@ const {
 
 const getJSON = (uri) => fetch(uri).then((response) => response.json());
 
+async function fetchWiki() {
+  const { contentWikiPlugin } = getWikiPluginFromConfig();
+  if (contentWikiPlugin) {
+    try {
+      const { space, page_title } = contentWikiPlugin;
+
+      // Step 1: Fetch content
+      await fetchContentFromTitleAndSpacekey(page_title, space);
+    } catch (error) {
+      console.log('❌ Failed to create wiki content', error);
+    }
+  }
+}
+
 async function fetchCollection(collectionPath, filePath) {
   console.log(`⌛️ Fetching collection: ${collectionPath}`);
   const collectionData = await getJSON(collectionPath);
@@ -28,54 +42,45 @@ async function fetchCollection(collectionPath, filePath) {
 async function fetchProjectData() {
   const { PROJECT_URL } = process.env;
   try {
-    await fetchCollection(
-      `${PROJECT_URL}/collections/page/items`,
-      `${FETCHED_DATA_DIR}/page-data.json`
-    );
-    await fetchCollection(
-      `${PROJECT_URL}/collections/page/items?locale=ja_JP`,
-      `${FETCHED_DATA_DIR}/page-data-ja.json`
-    );
-    await fetchCollection(
-      `${PROJECT_URL}/collections/page/items?locale=ko_KR`,
-      `${FETCHED_DATA_DIR}/page-data-ko.json`
-    );
-    await fetchCollection(
-      `${PROJECT_URL}/collections/category/items`,
-      `${FETCHED_DATA_DIR}/category-data.json`
-    );
-    await fetchCollection(
-      `${PROJECT_URL}/collections/config/item`,
-      `${FETCHED_DATA_DIR}/config-data.json`
-    );
-    await fetchCollection(
-      `${PROJECT_URL}/collections/home_page/item`,
-      `${FETCHED_DATA_DIR}/home-page-data.json`
-    );
-    await fetchCollection(
-      `${PROJECT_URL}/collections/dropdown/items`,
-      `${FETCHED_DATA_DIR}/dropdown-data.json`
-    );
-    await fetchCollection(
-      `${PROJECT_URL}/collections/footer/item`,
-      `${FETCHED_DATA_DIR}/footer-data.json`
-    );
-    await fetchCollection(
-      `${PROJECT_URL}/collections/navbar/item`,
-      `${FETCHED_DATA_DIR}/navbar-data.json`
-    );
-
-    const { contentWikiPlugin } = getWikiPluginFromConfig();
-    if (contentWikiPlugin) {
-      try {
-        const { space, page_title } = contentWikiPlugin;
-
-        // Step 1: Fetch content
-        await fetchContentFromTitleAndSpacekey(page_title, space);
-      } catch (error) {
-        console.log('❌ Failed to create wiki content', error);
-      }
-    }
+    await Promise.all([
+      fetchCollection(
+        `${PROJECT_URL}/collections/page/items`,
+        `${FETCHED_DATA_DIR}/page-data.json`
+      ),
+      fetchCollection(
+        `${PROJECT_URL}/collections/page/items?locale=ja_JP`,
+        `${FETCHED_DATA_DIR}/page-data-ja.json`
+      ),
+      fetchCollection(
+        `${PROJECT_URL}/collections/page/items?locale=ko_KR`,
+        `${FETCHED_DATA_DIR}/page-data-ko.json`
+      ),
+      fetchCollection(
+        `${PROJECT_URL}/collections/category/items`,
+        `${FETCHED_DATA_DIR}/category-data.json`
+      ),
+      fetchCollection(
+        `${PROJECT_URL}/collections/config/item`,
+        `${FETCHED_DATA_DIR}/config-data.json`
+      ),
+      fetchCollection(
+        `${PROJECT_URL}/collections/home_page/item`,
+        `${FETCHED_DATA_DIR}/home-page-data.json`
+      ),
+      fetchCollection(
+        `${PROJECT_URL}/collections/dropdown/items`,
+        `${FETCHED_DATA_DIR}/dropdown-data.json`
+      ),
+      fetchCollection(
+        `${PROJECT_URL}/collections/footer/item`,
+        `${FETCHED_DATA_DIR}/footer-data.json`
+      ),
+      fetchCollection(
+        `${PROJECT_URL}/collections/navbar/item`,
+        `${FETCHED_DATA_DIR}/navbar-data.json`
+      ),
+      fetchWiki(),
+    ]);
     console.log('-------');
     console.log('✅ Fetched project data');
   } catch (err) {
