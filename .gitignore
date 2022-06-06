@@ -36,3 +36,6 @@ yarn-error.log*
 /built-data/*
 /fetched-data/*
 /posts
+/public/images/wiki
+
+
