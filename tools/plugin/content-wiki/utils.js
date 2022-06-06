@@ -1,9 +1,21 @@
 const cheerio = require('cheerio');
 
-const configData = require('../../../fetched-data/config-data.json');
+const data = {
+  configData,
+  categoryData,
+};
+
+(function () {
+  if (fs.existsSync(`${FETCHED_DATA_DIR}/config-data.json`)) {
+    data.configData = require('../../../fetched-data/config-data.json');
+  }
+  if (fs.existsSync(`${FETCHED_DATA_DIR}/category-data.json`)) {
+    data.categoryData = require('../../../fetched-data/category-data.json');
+  }
+})();
+
 const defaultConfigData = require('../../../default-data/config-data.json');
 const { plugin } = configData || defaultConfigData;
-const categoryData = require('../../../fetched-data/category-data.json');
 const defaultCategoryData = require('../../../default-data/category-data.json');
 const { items: categoryItems } = categoryData || defaultCategoryData;
 const { getLocalePath } = require('../../utils/format');
