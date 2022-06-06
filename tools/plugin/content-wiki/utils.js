@@ -1,5 +1,6 @@
 const cheerio = require('cheerio');
 const fs = require('fs');
+const { FETCHED_DATA_DIR } = require('../../constants');
 
 const data = {
   configData: null,
