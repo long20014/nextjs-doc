@@ -1,6 +1,4 @@
 const { getWikiPluginFromConfig } = require('./utils');
-const { sidebarItems } = require('../../../built-data/sidebar-tree-en.json');
-const { navbarItems } = require('../../../built-data/navbar-en.json');
 const { BUILT_DATA_DIR } = require('../../constants');
 const { INTRODUCTION_PAGE_NAME } = require('./constants');
 const fs = require('fs');
@@ -12,6 +10,8 @@ const { getLocalePath } = require('../../utils/format');
  * @returns wiki config object, includes navBar and sideBar configs
  */
 const resolveWikiConfig = (pageObj) => {
+  const { sidebarItems } = require('../../../built-data/sidebar-tree-en.json');
+  const { navbarItems } = require('../../../built-data/navbar-en.json');
   const { contentWikiPlugin, wikiCategory } = getWikiPluginFromConfig();
   if (contentWikiPlugin && wikiCategory) {
     const localePath = getLocalePath('en');
