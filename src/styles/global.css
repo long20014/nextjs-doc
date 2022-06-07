@@ -91,6 +91,11 @@ img {
   margin: 0 auto;
   max-width: calc(var(--container-width) - var(--sidebar-width));
   display: flex;
+  transition: max-width var(--standard-transition-timing) ease;
+}
+
+.post-container.expanded {
+  max-width: calc(var(--container-width) - var(--hidden-sidebar-width));
 }
 
 .page-body { 
@@ -529,13 +534,13 @@ img {
   .footer .footer-container {
     max-width: var(--container-width);
   }
-  .post-container {
+  .outer-container .post-container {
     max-width: calc(100% - var(--sidebar-width));
   }
 }
 
 @media (min-width: 1621px) {
-  .post-container {
+  .outer-container .post-container {
     max-width: var(--container-width);
   }
 }
@@ -567,7 +572,7 @@ img {
     margin-right: 0;
   }
 
-  .post-container {
+  .outer-container .post-container {
     max-width: 100%;
   }
 
