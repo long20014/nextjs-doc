@@ -45,12 +45,16 @@ const formatPath = (path) => {
   return formatedPath;
 };
 
-function convertHTMLToMarkdown(contentComponent) {
-  const htmlString =
-    (contentComponent._type === 'rich_text_editor' &&
-      contentComponent.editor) ||
-    '';
-  return htmlString ? nhm.translate(htmlString) : '';
+function translateContentToMarkdown(contentComponent) {
+  const contentString = contentComponent.editor || '';
+  switch (contentComponent._type) {
+    case 'rich_text_editor':
+      return nhm.translate(contentString);
+    case 'markdown_editor':
+      return contentString;
+    default:
+      return '';
+  }
 }
 
 function toNonWhitespaced(str) {
@@ -71,7 +75,7 @@ function getLocaleFileName(fileName, locale) {
 
 module.exports = {
   toKebabCase,
-  convertHTMLToMarkdown,
+  translateContentToMarkdown,
   getPathParts,
   getCategoryPathPart,
   getLastPathPart,

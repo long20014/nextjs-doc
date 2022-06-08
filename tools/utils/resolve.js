@@ -50,7 +50,7 @@ const {
 } = require('../../default-data/category-data.json');
 const {
   toKebabCase,
-  convertHTMLToMarkdown,
+  translateContentToMarkdown,
   getPathParts,
   getCategoryPathPart,
   getLastPathPart,
@@ -413,7 +413,7 @@ function createDocFiles() {
         let pageContent = '';
 
         if (path && content && content[0]) {
-          pageContent = convertHTMLToMarkdown(content[0]);
+          pageContent = translateContentToMarkdown(content[0]);
         }
 
         const markdownContent = createMarkdownContent(
