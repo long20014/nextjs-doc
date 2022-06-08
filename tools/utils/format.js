@@ -1,6 +1,8 @@
 const { NodeHtmlMarkdown } = require('node-html-markdown');
 
-const nhm = new NodeHtmlMarkdown(
+const nhm = new NodeHtmlMarkdown({ keepDataImages: true });
+
+const nhmWithHeadingCustomization = new NodeHtmlMarkdown(
   { keepDataImages: true },
   {
     // Docusaurus TOC by default ignores h1 -> change h1->h2, h2->h3,...
@@ -56,7 +58,7 @@ function toNonWhitespaced(str) {
 }
 
 function convertHTMLContentToMarkdown(htmlContent) {
-  return nhm.translate(htmlContent);
+  return nhmWithHeadingCustomization.translate(htmlContent);
 }
 
 function getLocalePath(locale) {

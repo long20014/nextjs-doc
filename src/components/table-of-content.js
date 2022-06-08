@@ -17,11 +17,11 @@ export default function TableOfContent({}) {
   };
 
   const renderDesktopTOCItem = (item) => {
-    const { dom, children } = item;
+    const { dom, children, index } = item;
     const { innerText: headerContent } = dom;
     if (children) {
       return (
-        <li key={headerContent}>
+        <li key={headerContent + index}>
           <span
             style={order === item.order ? styles.hover : styles.normal}
             onClick={(e) => handleClick(dom, e)}
@@ -33,7 +33,7 @@ export default function TableOfContent({}) {
       );
     }
     return (
-      <li key={headerContent}>
+      <li key={headerContent + index}>
         <span
           style={order === item.order ? styles.hover : styles.normal}
           onClick={(e) => handleClick(dom, e)}
