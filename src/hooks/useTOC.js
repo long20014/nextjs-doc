@@ -1,3 +1,5 @@
+'use strict';
+
 import jump from 'jump.js';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
@@ -10,6 +12,10 @@ export default function useTOC() {
   const router = useRouter();
   const [mobileTOCDisplay, setMobileTOCDisplay] = useState(false);
   const [mobileTOCBtnActive, setMobileTOCBtnActive] = useState(false);
+
+  const isWikiPath = (path) => {
+    return path.split('/')[3] === 'wiki';
+  };
 
   const toggleTOCDisplay = () => {
     setMobileTOCDisplay((mobileTOCDisplay) => !mobileTOCDisplay);
@@ -27,10 +33,14 @@ export default function useTOC() {
 
   useEffect(() => {
     const headers = Array.from(
-      document.querySelectorAll('.page-content h2,.page-content h3')
+      document.querySelectorAll(
+        '.page-content h2,.page-content h3,.page-content h4,.page-content h5, .page-content h6'
+      )
     );
     setHeaders(headers);
-    const TOC = createTOC(headers);
+    const TOC = isWikiPath(router.asPath)
+      ? createWikiTOC(headers)
+      : createTOC(headers);
     setTOC(TOC);
   }, [router.asPath, router.locale]);
 
@@ -88,17 +98,75 @@ export default function useTOC() {
     return () => window.removeEventListener('scroll', scrollActive, false);
   }, [headers]);
 
+  const addChild = (children, header, index) => {
+    children.push({
+      dom: header,
+      children: [],
+      order: index,
+    });
+  };
+
   const createTOC = (headers) => {
     const TOC = [];
     headers.forEach((header, index) => {
       if (header.nodeName === 'H2') {
         TOC.push({ dom: header, children: [], order: index });
-      } else {
-        TOC[TOC.length - 1].children.push({
-          dom: header,
-          children: null,
-          order: index,
-        });
+      } else if (header.nodeName === 'H3') {
+        if (TOC.length > 0 && TOC[TOC.length - 1].dom.nodeName === 'H2') {
+          const h2Children = TOC[TOC.length - 1].children;
+          addChild(h2Children, header, index);
+        } else {
+          TOC.push({ dom: header, children: [], order: index });
+        }
+      } else if (header.nodeName === 'H4') {
+        if (TOC.length > 0 && TOC[TOC.length - 1].dom.nodeName === 'H2') {
+          const h2Children = TOC[TOC.length - 1].children;
+          if (h2Children.length > 0) {
+            const h4Children = h2Children[h2Children.length - 1].children;
+            addChild(h4Children, header, index);
+          }
+        } else if (
+          TOC.length > 0 &&
+          TOC[TOC.length - 1].dom.nodeName === 'H3'
+        ) {
+          const h4Children = TOC[TOC.length - 1].children;
+          addChild(h4Children, header, index);
+        } else {
+          TOC.push({ dom: header, children: [], order: index });
+        }
+      }
+    });
+    return TOC;
+  };
+
+  const createWikiTOC = (headers) => {
+    const TOC = [];
+    headers.forEach((header, index) => {
+      if (header.nodeName === 'H2') {
+        TOC.push({ dom: header, children: [], order: index });
+      } else if (header.nodeName === 'H4') {
+        if (TOC.length > 0 && TOC[TOC.length - 1].dom.nodeName === 'H2') {
+          const h2Children = TOC[TOC.length - 1].children;
+          addChild(h2Children, header, index);
+        } else {
+          TOC.push({ dom: header, children: [], order: index });
+        }
+      } else if (header.nodeName === 'H6') {
+        if (TOC.length > 0 && TOC[TOC.length - 1].dom.nodeName === 'H2') {
+          const h2Children = TOC[TOC.length - 1].children;
+          if (h2Children.length > 0) {
+            const h4Children = h2Children[h2Children.length - 1].children;
+            addChild(h4Children, header, index);
+          }
+        } else if (
+          TOC.length > 0 &&
+          TOC[TOC.length - 1].dom.nodeName === 'H4'
+        ) {
+          const h4Children = TOC[TOC.length - 1].children;
+          addChild(h4Children, header, index);
+        } else {
+          TOC.push({ dom: header, children: [], order: index });
+        }
       }
     });
     return TOC;

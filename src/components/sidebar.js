@@ -99,6 +99,11 @@ export default function Sidebar({ home }) {
 
   const toggleHideSidebar = () => {
     setHide((hide) => !hide);
+    if (hide) {
+      document.querySelector('.post-container').classList.remove('expanded');
+    } else {
+      document.querySelector('.post-container').classList.add('expanded');
+    }
   };
 
   const renderExpandSidebar = (hide) => {

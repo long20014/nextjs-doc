@@ -1,6 +1,8 @@
 const { NodeHtmlMarkdown } = require('node-html-markdown');
 
-const nhm = new NodeHtmlMarkdown(
+const nhm = new NodeHtmlMarkdown({ keepDataImages: true });
+
+const nhmWithHeadingCustomization = new NodeHtmlMarkdown(
   { keepDataImages: true },
   {
     // Docusaurus TOC by default ignores h1 -> change h1->h2, h2->h3,...
@@ -43,12 +45,16 @@ const formatPath = (path) => {
   return formatedPath;
 };
 
-function convertHTMLToMarkdown(contentComponent) {
-  const htmlString =
-    (contentComponent._type === 'rich_text_editor' &&
-      contentComponent.editor) ||
-    '';
-  return htmlString ? nhm.translate(htmlString) : '';
+function translateContentToMarkdown(contentComponent) {
+  const contentString = contentComponent.editor || '';
+  switch (contentComponent._type) {
+    case 'rich_text_editor':
+      return nhm.translate(contentString);
+    case 'markdown_editor':
+      return contentString;
+    default:
+      return '';
+  }
 }
 
 function toNonWhitespaced(str) {
@@ -56,7 +62,7 @@ function toNonWhitespaced(str) {
 }
 
 function convertHTMLContentToMarkdown(htmlContent) {
-  return nhm.translate(htmlContent);
+  return nhmWithHeadingCustomization.translate(htmlContent);
 }
 
 function getLocalePath(locale) {
@@ -69,7 +75,7 @@ function getLocaleFileName(fileName, locale) {
 
 module.exports = {
   toKebabCase,
-  convertHTMLToMarkdown,
+  translateContentToMarkdown,
   getPathParts,
   getCategoryPathPart,
   getLastPathPart,

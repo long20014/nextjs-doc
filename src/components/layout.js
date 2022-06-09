@@ -7,6 +7,7 @@ import TableOfContent from './table-of-content';
 import MobileTableOfContent from './mobile-table-of-content';
 import { LangStateProvider } from 'src/contexts/language';
 import GoTopButton from './go-top-btn';
+import classNames from 'classnames';
 
 export const siteTitle = 'Next.js Sample Website';
 
@@ -40,7 +41,7 @@ function InnerLayout({ children, home }) {
       <div className="outer-container">
         {!home && <MobileTableOfContent />}
         {<Sidebar home={home} />}
-        <main className="post-container">
+        <main className={home ? 'home-container' : 'post-container'}>
           {children}
           {!home && <TableOfContent />}
         </main>
