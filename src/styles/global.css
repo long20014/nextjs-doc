@@ -297,8 +297,11 @@ img {
   border-collapse: collapse;
   display: block;
   overflow: auto;
+} 
+.page-content table tbody {
   border-bottom: 1px solid #a2a4a7;
 }
+
 
 .page-content table tr {
   background-color: transparent;
