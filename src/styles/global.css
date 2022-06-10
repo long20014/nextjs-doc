@@ -267,7 +267,7 @@ img {
   max-height: calc(100vh - 3rem); 
   top: calc(var(--header-height) + 1rem);
   position: sticky;
-  word-break: break-all;
+  word-break: break-word;
   z-index: 10;
   overflow-y: auto;
 }
