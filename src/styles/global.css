@@ -522,6 +522,7 @@ img {
   position: fixed;
   bottom: 1.3rem;
   right: 1.3rem;
+  z-index: 99;
 }
 
 .go-top-btn:hover {
