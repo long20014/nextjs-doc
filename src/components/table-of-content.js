@@ -1,6 +1,5 @@
 import React from 'react';
 import constants from 'src/utils/constants';
-import classNames from 'classnames';
 import useTOC from 'src/hooks/useTOC';
 
 const { TEXT_GOLDEN } = constants;

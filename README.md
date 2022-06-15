@@ -6,6 +6,8 @@ This website is built using [Docusaurus 2](https://docusaurus.io/), a modern sta
 
 Wiki: https://wiki.linecorp.com/display/LINEFE/LandPress+Template+-+Docs
 
+See env.example for environment variables.
+
 ### Installation
 
 ```
