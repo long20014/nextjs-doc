@@ -9,6 +9,9 @@ import PostNavDataKo from 'built-data/post-nav-data-ko.json';
 import PostNavDataJa from 'built-data/post-nav-data-ja.json';
 import { useRouter } from 'next/router';
 import { resolveLangPath } from 'src/utils/resolve';
+import CodeBlock from '@/components/code-block';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 const getPostNavItems = (locale) => {
   let postNavItems = PostNavDataEn.postNavItems;
@@ -44,7 +47,13 @@ export default function Post({ postData }) {
         </Head>
         <article>
           <h1 className={utilStyles.headingXl}>{postData.title}</h1>
-          <div dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
+          {/* <div dangerouslySetInnerHTML={{ __html: postData.contentHtml }} /> */}
+          <ReactMarkdown
+            components={CodeBlock}
+            remarkPlugins={[[remarkGfm, { singleTilde: false }]]}
+          >
+            {postData.markdown}
+          </ReactMarkdown>
         </article>
         <PostNav postNavItem={postNavItem}></PostNav>
       </div>
