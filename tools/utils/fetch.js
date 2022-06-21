@@ -79,6 +79,10 @@ async function fetchProjectData() {
         `${PROJECT_URL}/collections/navbar/item`,
         `${FETCHED_DATA_DIR}/navbar-data.json`
       ),
+      fetchCollection(
+        `${PROJECT_URL}/collections/tag/items`,
+        `${FETCHED_DATA_DIR}/tag-data-en.json`
+      ),
       fetchWiki(),
     ]);
     console.log('-------');

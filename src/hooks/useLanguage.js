@@ -35,7 +35,8 @@ export default function useLanguage() {
     changeLang(dispatch, lang);
     console.log(`doc path: ${pathname} ${asPath}`);
     if (pathname !== '/posts/[...id]') {
-      router.push({ pathname, query }, { pathname, query: `lang=${lang}` });
+      const pathWithoutLangQuery = asPath.split('/?lang=')[0];
+      router.push(`${pathWithoutLangQuery}/?lang=${lang}`);
     } else {
       router.push(`/posts/${lang}/${docPath}`);
     }

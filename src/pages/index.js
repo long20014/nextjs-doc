@@ -20,7 +20,7 @@ export default function Home({ allPostsData }) {
   const siteDescription = homePageData?.description;
   const siteContent = homePageData?.content?.[0].editor;
   return (
-    <Layout home>
+    <Layout type={'home'}>
       <Head>
         <title>{siteTitle}</title>
       </Head>

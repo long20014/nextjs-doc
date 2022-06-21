@@ -12,6 +12,7 @@ import { resolveLangPath } from 'src/utils/resolve';
 import CodeBlock from '@/components/code-block';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import Tags from '@/components/tags';
 
 const getPostNavItems = (locale) => {
   let postNavItems = PostNavDataEn.postNavItems;
@@ -40,13 +41,16 @@ export default function Post({ postData }) {
   }, [router.asPath]);
 
   return (
-    <Layout>
+    <Layout type={'posts'}>
       <div className="page-content">
         <Head>
           <title>{postData.title}</title>
         </Head>
         <article>
           <h1 className={utilStyles.headingXl}>{postData.title}</h1>
+          {postData.tags && postData.tags.length > 0 && (
+            <Tags tags={postData.tags}></Tags>
+          )}
           {/* <div dangerouslySetInnerHTML={{ __html: postData.contentHtml }} /> */}
           <ReactMarkdown
             components={CodeBlock}

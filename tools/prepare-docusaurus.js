@@ -2,6 +2,7 @@ const {
   resolve: {
     createDocFiles,
     resolveSidebar,
+    resolveTags,
     resolveNavbarFromCategories,
     createPostNavData,
   },
@@ -9,6 +10,7 @@ const {
 
 const { main: runWikiPlugin } = require('./plugin/content-wiki');
 function prepareDocusaurus() {
+  resolveTags();
   createDocFiles();
   resolveNavbarFromCategories();
   resolveSidebar();

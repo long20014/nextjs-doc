@@ -51,10 +51,10 @@ const getNavbarItems = (locale) => {
   return navbarItems;
 };
 
-export default function Sidebar({ home }) {
+export default function Sidebar({ layoutType }) {
   const { state } = useLangContext();
   const [hide, setHide] = useState(false);
-  const [isMainMenu, setIsMainMenu] = useState(home);
+  const [isMainMenu, setIsMainMenu] = useState(layoutType === 'home');
   const [navbarItems, setNavbarItems] = useState(getNavbarItems(state.lang));
   const [sidebarItems, setSidebarItems] = useState(getSidebarItems(state.lang));
   const router = useRouter();
@@ -208,9 +208,9 @@ export default function Sidebar({ home }) {
             </svg>
           </div>
         </div>
-        {!home && renderGoToCategoryMenuButton()}
-        {!home && renderBackToMainMenuButton()}
-        {!home && renderNodeTree()}
+        {layoutType === 'posts' && renderGoToCategoryMenuButton()}
+        {layoutType === 'posts' && renderBackToMainMenuButton()}
+        {layoutType === 'posts' && renderNodeTree()}
         {renderCategoryTree()}
       </div>
     );
@@ -244,8 +244,8 @@ export default function Sidebar({ home }) {
 
   return (
     <>
-      {!home && renderDesktopSidebar()}
-      {renderMobileSidebar()}
+      {layoutType === 'posts' && renderDesktopSidebar()}
+      {/* {renderMobileSidebar()} */}
     </>
   );
 }

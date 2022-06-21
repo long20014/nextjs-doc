@@ -272,6 +272,22 @@ img {
   overflow-y: auto;
 }
 
+.tag-section {
+  margin-bottom: 1rem;
+}
+
+.tag-label {
+  font-weight: bold;
+}
+.tag {
+  border: 1px solid var(--light-gray);
+  border-radius: 5px;
+  padding: 0.3em 0.4em;
+  margin-left: 0.4em;
+  color: var(--green-primary);
+  font-size: 14px;
+}
+
 .table-of-content ul,
 .mobile-table-of-content ul {
   padding-inline-start: 1.5em;

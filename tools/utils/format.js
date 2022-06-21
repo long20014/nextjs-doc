@@ -1,4 +1,5 @@
 const { NodeHtmlMarkdown } = require('node-html-markdown');
+const showdown = require('showdown');
 
 const nhm = new NodeHtmlMarkdown({ keepDataImages: true });
 
@@ -57,6 +58,25 @@ function translateContentToMarkdown(contentComponent) {
   }
 }
 
+function translateContentToHtml(contentComponent) {
+  // Use gray-matter to parse the post metadata section
+  const convertToHTML = async (content) => {
+    const converter = new showdown.Converter();
+    const contentHtml = converter.makeHtml(content);
+    return contentHtml;
+  };
+
+  const contentString = contentComponent.editor || '';
+  switch (contentComponent._type) {
+    case 'rich_text_editor':
+      return contentString;
+    case 'markdown_editor':
+      return convertToHTML(contentString);
+    default:
+      return '';
+  }
+}
+
 function toNonWhitespaced(str) {
   return str.replace(/\s/g, '');
 }
@@ -83,4 +103,5 @@ module.exports = {
   convertHTMLContentToMarkdown,
   getLocalePath,
   getLocaleFileName,
+  translateContentToHtml,
 };
