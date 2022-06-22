@@ -1,9 +1,8 @@
 'use strict';
-
-import jump from 'jump.js';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { easeInOutQuad } from 'src/utils/utils';
+
+const OFFSET = 65;
 
 export default function useTOC() {
   const [TOC, setTOC] = useState([]);
@@ -48,13 +47,12 @@ export default function useTOC() {
     e.preventDefault();
     e.stopPropagation();
 
-    jump(dom, {
-      duration: 300,
-      offset: -100,
-      callback: undefined,
-      easing: easeInOutQuad,
-      a11y: false,
-    });
+    if (typeof window !== 'undefined') {
+      window.scrollTo({
+        top: dom.offsetTop - OFFSET + 1,
+        behavior: 'smooth',
+      });
+    }
   };
 
   useEffect(() => {
@@ -81,7 +79,7 @@ export default function useTOC() {
         }
       } else {
         headers.map((item, i) => {
-          const itemOffset = item.offsetTop - 80;
+          const itemOffset = item.offsetTop - OFFSET;
           if (windowScrollY < headers[0].offsetTop - 160) {
             setOrder(0);
           } else {

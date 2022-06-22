@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import classNames from 'classnames';
-import jump from 'jump.js';
-import { easeInOutQuad } from 'src/utils/utils';
+
+const OFFSET = 65;
 
 export default function GoTopButton() {
   const [hide, setHide] = useState(false);
@@ -13,13 +13,12 @@ export default function GoTopButton() {
 
     const dom = document.querySelector('.outer-container');
 
-    jump(dom, {
-      duration: 300,
-      offset: -100,
-      callback: undefined,
-      easing: easeInOutQuad,
-      a11y: false,
-    });
+    if (typeof window !== 'undefined') {
+      window.scrollTo({
+        top: dom.offsetTop - OFFSET + 1,
+        behavior: 'smooth',
+      });
+    }
   };
 
   useEffect(() => {
