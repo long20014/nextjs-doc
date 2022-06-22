@@ -134,6 +134,7 @@ function resolveTags() {
         name: tag.name,
         id: `${tag.name}`,
         locale,
+        pageCount: tag.pages.length,
       });
     });
 

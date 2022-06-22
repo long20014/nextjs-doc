@@ -17,6 +17,19 @@ const containerStyle = {
   flexDirection: 'column',
 };
 
+const getContainerClass = (layoutType) => {
+  switch (layoutType) {
+    // case 'home':
+    //   return 'home-container';
+    case 'posts':
+      return 'post-container';
+    // case 'tags':
+    //   return 'tag-container'
+    default:
+      return 'home-container';
+  }
+};
+
 function InnerLayout({ children, type }) {
   return (
     <div id="container" style={containerStyle}>
@@ -41,7 +54,7 @@ function InnerLayout({ children, type }) {
       <div className="outer-container">
         {type === 'posts' && <MobileTableOfContent />}
         {<Sidebar layoutType={type} />}
-        <main className={type === 'home' ? 'home-container' : 'post-container'}>
+        <main className={getContainerClass(type)}>
           {children}
           {type === 'posts' && <TableOfContent />}
         </main>

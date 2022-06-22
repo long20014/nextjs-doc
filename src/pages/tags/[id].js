@@ -29,7 +29,9 @@ function Page({ page }) {
   const { title, excerpt, to } = page;
   return (
     <div className="tag-result">
-      <NormalLink href={to}>{title}</NormalLink>
+      <h2>
+        <NormalLink href={to}>{title}</NormalLink>
+      </h2>
       <p dangerouslySetInnerHTML={{ __html: excerpt }} />
     </div>
   );
@@ -48,11 +50,14 @@ export default function Tag({ id }) {
   return (
     <Layout type={'tags'}>
       {tag && (
-        <div>
+        <div className="tag-groups-section">
           <h1>
-            There are {tag.pages.length} results for {tag.name}
+            {tag.pages.length} docs tagged with "{tag.name}"
           </h1>
-          <NormalLink href={'/tags'}>View all Tags</NormalLink>
+          <div style={{ marginBottom: '2em' }}>
+            <NormalLink href={'/tags'}>View All Tags</NormalLink>
+          </div>
+
           {tag.pages.map((page) => {
             return <Page key={page.to} page={page} />;
           })}

@@ -21,7 +21,7 @@ const getTagGroups = (locale) => {
 function TagRow({ tagGroup }) {
   return (
     <li className="tag-group-row">
-      <div className="tag-group-label">{tagGroup.groupName}</div>
+      <h2 className="tag-group-label">{tagGroup.groupName.toUpperCase()}</h2>
       {tagGroup.items.map((item) => (
         <TagItem key={item.id} item={item} />
       ))}
@@ -30,10 +30,11 @@ function TagRow({ tagGroup }) {
 }
 
 function TagItem({ item }) {
-  const { to, name } = item;
+  const { to, name, pageCount } = item;
   return (
     <NormalLink href={to} classes={'tag-item'}>
-      {name}
+      <span>{name}</span>
+      <span className="page-count">{pageCount}</span>
     </NormalLink>
   );
 }
@@ -50,7 +51,8 @@ export default function Tag({}) {
 
   return (
     <Layout type="tags">
-      <div>
+      <div className="tag-groups-section">
+        <h1>Tags</h1>
         <ul>
           {tagGroups &&
             tagGroups.map((tagGroup) => (

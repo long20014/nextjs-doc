@@ -14,7 +14,7 @@ function Tag({ tag }) {
 
 export default function Tags({ tags }) {
   return (
-    <div className="tag-section">
+    <div className="tag-area">
       <span className="tag-label">Tags: </span>
       {tags.map((tag) => {
         return <Tag key={tag} tag={tag}></Tag>;
