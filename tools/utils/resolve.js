@@ -6,6 +6,8 @@ const data = {
   pageItemsKo: null,
   pageItemsJa: null,
   tagItemsEn: null,
+  tagItemsJa: null,
+  tagItemsKo: null,
 };
 
 const { getLocalePath, getLocaleFileName } = require('./format');
@@ -40,6 +42,14 @@ const { sortItems, sortByStringField } = require('./sort');
     const { items } = require('../../fetched-data/tag-data-en.json');
     data.tagItemsEn = items;
   }
+  if (fs.existsSync(`${FETCHED_DATA_DIR}/tag-data-ja.json`)) {
+    const { items } = require('../../fetched-data/tag-data-ja.json');
+    data.tagItemsJa = items;
+  }
+  if (fs.existsSync(`${FETCHED_DATA_DIR}/tag-data-ko.json`)) {
+    const { items } = require('../../fetched-data/tag-data-ko.json');
+    data.tagItemsKo = items;
+  }
 })();
 
 const {
@@ -49,6 +59,8 @@ const {
   pageItemsJa,
   pageItemsKo,
   tagItemsEn,
+  tagItemsJa,
+  tagItemsKo,
 } = data;
 
 const {
@@ -65,7 +77,7 @@ const {
 
 function resolveTags() {
   function createExcerpt(content) {
-    pageContent = translateContentToHtml(content);
+    const pageContent = translateContentToHtml(content);
     const pattern = /<p>.*<\/p>/g;
     const result = pattern.exec(pageContent);
     if (result) {
@@ -94,7 +106,7 @@ function resolveTags() {
     tagItems.forEach((tag) => {
       const { page, name } = tag;
       const localePath = getLocalePath(locale);
-      pages = page
+      const pages = page
         .filter((p) => p.locale === getLPCLocale(locale))
         .map((p) => {
           const { title, path, content, name } = p;
@@ -154,8 +166,8 @@ function resolveTags() {
     );
   }
   resolveLocaleTags(tagItemsEn, 'en');
-  resolveLocaleTags(tagItemsEn, 'ko');
-  resolveLocaleTags(tagItemsEn, 'ja');
+  resolveLocaleTags(tagItemsKo, 'ko');
+  resolveLocaleTags(tagItemsJa, 'ja');
 }
 
 function resolveSidebar() {

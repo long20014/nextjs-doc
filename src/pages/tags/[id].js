@@ -30,7 +30,7 @@ function Page({ page }) {
   return (
     <div className="tag-result">
       <h2>
-        <NormalLink href={to}>{title}</NormalLink>
+        <NormalLink href={`${to}`}>{title}</NormalLink>
       </h2>
       <p dangerouslySetInnerHTML={{ __html: excerpt }} />
     </div>
@@ -40,22 +40,24 @@ function Page({ page }) {
 export default function Tag({ id }) {
   const router = useRouter();
   const [tag, setTag] = useState(null);
+  const [lang, setLang] = useState(resolveLangPath(router.asPath));
 
   useEffect(() => {
-    const lang = resolveLangPath(router.asPath);
+    setLang(resolveLangPath(router.asPath));
+  }, [router.asPath]);
+
+  useEffect(() => {
     const tag = getTag(id, lang);
     setTag(tag);
-  }, [router.asPath]);
+  }, [lang]);
 
   return (
     <Layout type={'tags'}>
       {tag && (
         <div className="tag-groups-section">
-          <h1>
-            {tag.pages.length} docs tagged with "{tag.name}"
-          </h1>
+          <h1>{`${tag.pages.length} docs tagged with "${tag.name}"`}</h1>
           <div style={{ marginBottom: '2em' }}>
-            <NormalLink href={'/tags'}>View All Tags</NormalLink>
+            <NormalLink href={`/tags/?lang=${lang}`}>View All Tags</NormalLink>
           </div>
 
           {tag.pages.map((page) => {

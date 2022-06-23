@@ -18,21 +18,21 @@ const getTagGroups = (locale) => {
   return tagGroups;
 };
 
-function TagRow({ tagGroup }) {
+function TagRow({ tagGroup, lang }) {
   return (
     <li className="tag-group-row">
       <h2 className="tag-group-label">{tagGroup.groupName.toUpperCase()}</h2>
       {tagGroup.items.map((item) => (
-        <TagItem key={item.id} item={item} />
+        <TagItem key={item.id} item={item} lang={lang} />
       ))}
     </li>
   );
 }
 
-function TagItem({ item }) {
+function TagItem({ item, lang }) {
   const { to, name, pageCount } = item;
   return (
-    <NormalLink href={to} classes={'tag-item'}>
+    <NormalLink href={`${to}/?lang=${lang}`} classes={'tag-item'}>
       <span>{name}</span>
       <span className="page-count">{pageCount}</span>
     </NormalLink>
@@ -42,12 +42,17 @@ function TagItem({ item }) {
 export default function Tag({}) {
   const router = useRouter();
   const [tagGroups, setTagGroups] = useState(null);
+  const [lang, setLang] = useState(resolveLangPath(router.asPath));
 
   useEffect(() => {
-    const lang = resolveLangPath(router.asPath);
+    const currentLang = resolveLangPath(router.asPath);
+    setLang(currentLang);
+  }, [router.asPath]);
+
+  useEffect(() => {
     const tagGroups = getTagGroups(lang);
     setTagGroups(tagGroups);
-  }, [router.asPath]);
+  }, [lang]);
 
   return (
     <Layout type="tags">
@@ -56,7 +61,11 @@ export default function Tag({}) {
         <ul>
           {tagGroups &&
             tagGroups.map((tagGroup) => (
-              <TagRow key={tagGroup.groupName} tagGroup={tagGroup} />
+              <TagRow
+                key={tagGroup.groupName}
+                tagGroup={tagGroup}
+                lang={lang}
+              />
             ))}
         </ul>
       </div>
