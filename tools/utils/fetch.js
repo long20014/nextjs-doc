@@ -79,6 +79,18 @@ async function fetchProjectData() {
         `${PROJECT_URL}/collections/navbar/item`,
         `${FETCHED_DATA_DIR}/navbar-data.json`
       ),
+      fetchCollection(
+        `${PROJECT_URL}/collections/tag/items`,
+        `${FETCHED_DATA_DIR}/tag-data-en.json`
+      ),
+      fetchCollection(
+        `${PROJECT_URL}/collections/tag/items?locale=ko_KR`,
+        `${FETCHED_DATA_DIR}/tag-data-ko.json`
+      ),
+      fetchCollection(
+        `${PROJECT_URL}/collections/tag/items?locale=ja_JP`,
+        `${FETCHED_DATA_DIR}/tag-data-ja.json`
+      ),
       fetchWiki(),
     ]);
     console.log('-------');

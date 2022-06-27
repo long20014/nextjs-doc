@@ -34,7 +34,7 @@ const linkStyles = {
   color: 'black',
 };
 
-export default function Header({ home }) {
+export default function Header({ layoutType }) {
   const router = useRouter();
   const { state } = useLangContext();
   const [navbarItems, setNavbarItems] = useState(getNavbarItems(state.lang));

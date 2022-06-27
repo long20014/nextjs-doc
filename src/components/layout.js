@@ -17,7 +17,20 @@ const containerStyle = {
   flexDirection: 'column',
 };
 
-function InnerLayout({ children, home }) {
+const getContainerClass = (layoutType) => {
+  switch (layoutType) {
+    // case 'home':
+    //   return 'home-container';
+    case 'posts':
+      return 'post-container';
+    // case 'tags':
+    //   return 'tag-container'
+    default:
+      return 'home-container';
+  }
+};
+
+function InnerLayout({ children, type }) {
   return (
     <div id="container" style={containerStyle}>
       <Head>
@@ -37,13 +50,13 @@ function InnerLayout({ children, home }) {
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
 
-      <Header home={home} />
+      <Header layoutType={type} />
       <div className="outer-container">
-        {!home && <MobileTableOfContent />}
-        {<Sidebar home={home} />}
-        <main className={home ? 'home-container' : 'post-container'}>
+        {type === 'posts' && <MobileTableOfContent />}
+        {<Sidebar layoutType={type} />}
+        <main className={getContainerClass(type)}>
           {children}
-          {!home && <TableOfContent />}
+          {type === 'posts' && <TableOfContent />}
         </main>
         <GoTopButton></GoTopButton>
       </div>
@@ -52,10 +65,10 @@ function InnerLayout({ children, home }) {
   );
 }
 
-export default function Layout({ children, home }) {
+export default function Layout({ children, type }) {
   return (
     <LangStateProvider>
-      <InnerLayout home={home}>{children}</InnerLayout>
+      <InnerLayout type={type}>{children}</InnerLayout>
     </LangStateProvider>
   );
 }

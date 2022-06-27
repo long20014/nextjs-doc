@@ -5,6 +5,9 @@ const data = {
   pageItems: null,
   pageItemsKo: null,
   pageItemsJa: null,
+  tagItemsEn: null,
+  tagItemsJa: null,
+  tagItemsKo: null,
 };
 
 const { getLocalePath, getLocaleFileName } = require('./format');
@@ -12,7 +15,7 @@ const { getLocalePath, getLocaleFileName } = require('./format');
 const { EN_LOCALE_DIR, JA_LOCALE_DIR, KO_LOCALE_DIR } = require('../constants');
 const { FETCHED_DATA_DIR, BUILT_DATA_DIR } = require('../constants');
 
-const { sortItems } = require('./sort');
+const { sortItems, sortByStringField } = require('./sort');
 
 (function () {
   if (fs.existsSync(`${FETCHED_DATA_DIR}/category-data.json`)) {
@@ -35,6 +38,18 @@ const { sortItems } = require('./sort');
     const { items } = require('../../fetched-data/page-data-ko.json');
     data.pageItemsKo = items;
   }
+  if (fs.existsSync(`${FETCHED_DATA_DIR}/tag-data-en.json`)) {
+    const { items } = require('../../fetched-data/tag-data-en.json');
+    data.tagItemsEn = items;
+  }
+  if (fs.existsSync(`${FETCHED_DATA_DIR}/tag-data-ja.json`)) {
+    const { items } = require('../../fetched-data/tag-data-ja.json');
+    data.tagItemsJa = items;
+  }
+  if (fs.existsSync(`${FETCHED_DATA_DIR}/tag-data-ko.json`)) {
+    const { items } = require('../../fetched-data/tag-data-ko.json');
+    data.tagItemsKo = items;
+  }
 })();
 
 const {
@@ -43,6 +58,9 @@ const {
   pageItems,
   pageItemsJa,
   pageItemsKo,
+  tagItemsEn,
+  tagItemsJa,
+  tagItemsKo,
 } = data;
 
 const {
@@ -51,10 +69,106 @@ const {
 const {
   toKebabCase,
   translateContentToMarkdown,
+  translateContentToHtml,
   getPathParts,
   getCategoryPathPart,
   getLastPathPart,
 } = require('./format');
+
+function resolveTags() {
+  function createExcerpt(content) {
+    const pageContent = translateContentToHtml(content);
+    const pattern = /<p>.*<\/p>/g;
+    const result = pattern.exec(pageContent);
+    if (result) {
+      const strippedHtml = result[0].replace(/<[^>]+>/g, '');
+      return strippedHtml;
+    }
+    return '';
+  }
+
+  function resolveLocaleTags(tagItems, locale) {
+    function getLPCLocale(locale) {
+      switch (locale) {
+        case 'en':
+          return 'en_US';
+        case 'ko':
+          return 'ko_KR';
+        case 'ja':
+          return 'ja_JP';
+        default:
+          throw new Error('locale is invalid');
+      }
+    }
+
+    const tagGroups = {};
+    const tags = [];
+    tagItems.forEach((tag) => {
+      const { page, name } = tag;
+      const localePath = getLocalePath(locale);
+      const pages = page
+        .filter((p) => p.locale === getLPCLocale(locale))
+        .map((p) => {
+          const { title, path, content, name } = p;
+          const excerpt = createExcerpt(content[0]);
+          return {
+            title: title,
+            excerpt,
+            to: `${localePath}/${path}/${name}`,
+          };
+        });
+      if (pages.length > 0) {
+        const result = {
+          name,
+          id: `${name}`,
+          locale,
+          to: `/tags/${name}`,
+          pages,
+        };
+        tags.push(result);
+      }
+    });
+    fs.writeFileSync(
+      `${BUILT_DATA_DIR}/tags-${locale}.json`,
+      JSON.stringify({ tags })
+    );
+
+    tags.forEach((tag) => {
+      const groupName = tag.name[0];
+      if (!tagGroups[groupName]) {
+        tagGroups[groupName] = {
+          groupName,
+          items: [],
+        };
+      }
+      tagGroups[groupName].items.push({
+        to: tag.to,
+        name: tag.name,
+        id: `${tag.name}`,
+        locale,
+        pageCount: tag.pages.length,
+      });
+    });
+
+    const finalTagGroups = [];
+    for (const key in tagGroups) {
+      finalTagGroups.push({
+        ...tagGroups[key],
+      });
+    }
+    fs.writeFileSync(
+      `${BUILT_DATA_DIR}/tag-groups-${locale}.json`,
+      JSON.stringify({
+        tagGroups: finalTagGroups.sort((a, b) =>
+          sortByStringField(a, b, 'groupName')
+        ),
+      })
+    );
+  }
+  resolveLocaleTags(tagItemsEn, 'en');
+  resolveLocaleTags(tagItemsKo, 'ko');
+  resolveLocaleTags(tagItemsJa, 'ja');
+}
 
 function resolveSidebar() {
   function createDropdowns(item, locale) {
@@ -408,8 +522,8 @@ function createDocFiles() {
         return ymlFrontMatter + content;
       }
 
-      pages.forEach((p) => {
-        const { title, path, content, name, tag, author, updatedAt } = p;
+      pages.forEach((page) => {
+        const { title, path, content, name, tag, author, updatedAt } = page;
         let pageContent = '';
 
         if (path && content && content[0]) {
@@ -467,6 +581,7 @@ function createDocFiles() {
 module.exports = {
   resolveSidebar,
   resolveNavbarFromCategories,
+  resolveTags,
   createDocFiles,
   createDataTrees,
   createPostNavData,

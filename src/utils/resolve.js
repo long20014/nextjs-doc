@@ -1,6 +1,8 @@
 export const resolveLangPath = (path) => {
-  if (path.split('/')[2]) {
-    return path.split('/')[2];
+  const validLangs = ['en', 'ja', 'ko'];
+  const langPath = path.split('/')[2];
+  if (langPath && validLangs.includes(langPath)) {
+    return langPath;
   }
   const lang = path.split('lang=');
   if (lang.length > 1) {
