@@ -7,7 +7,7 @@ const CodeBlock = {
   code({ node, inline, className, children, ...props }) {
     const match = /language-(\w+)/.exec(className || '');
     const [copied, setCopied] = useState(false);
-    return (
+    return !inline && match ? (
       <div className="code-wrapper">
         <CopyToClipboard
           text={String(children).replace(/\n$/, '')}
@@ -20,21 +20,19 @@ const CodeBlock = {
             {copied ? 'Copied' : 'Copy'}
           </span>
         </CopyToClipboard>
-        {!inline && match ? (
-          <SyntaxHighlighter
-            style={dracula}
-            language={match[1]}
-            PreTag="div"
-            {...props}
-          >
-            {String(children).replace(/\n$/, '')}
-          </SyntaxHighlighter>
-        ) : (
-          <code className={className} {...props}>
-            {children}
-          </code>
-        )}
+        <SyntaxHighlighter
+          style={dracula}
+          language={match[1]}
+          PreTag="div"
+          {...props}
+        >
+          {String(children).replace(/\n$/, '')}
+        </SyntaxHighlighter>
       </div>
+    ) : (
+      <code className={className} {...props}>
+        {children}
+      </code>
     );
   },
 };
